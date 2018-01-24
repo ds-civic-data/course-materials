@@ -3,10 +3,8 @@ Math 241 | Reed College | Spring 2018
 
 ![](figs/eclipse.png)
 
-### Schedule
 
-
-#### Week 1: Data Visualization I
+### Week 1: Data Visualization I
 
 **Tuesday**
 
@@ -22,7 +20,7 @@ Math 241 | Reed College | Spring 2018
 - Reading: p. 14 - 22
 
 
-#### Week 2: Data Visualization II
+### Week 2: Data Visualization II
 
 **Tuesday**
 
