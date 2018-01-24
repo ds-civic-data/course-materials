@@ -6,28 +6,40 @@ Math 241 | Reed College | Spring 2018
 ### Schedule
 
 
+#### Week 1: Data Visualization I
 
-#### Week 1: Intro
+**Tuesday**
 
-**Monday**
+- Course Logistics
+- Principles of Data Graphics
+- Reading: p. 1 - 14
+- Please join the [slack group](https://join.slack.com/t/ds-civic-data/signup )
+- Please join [datacamp]()
 
-- Parameters and statistics
-- Example: stratified sampling
-- Reading: p. 1-10, 13 - 20, 339 - 340
-- Please join the [slack group](https://join.slack.com/t/mathstats/signup).
+**Thursday**
 
-**Wednesday**
-
-- CDFs, ECDFs
-- Permutation tests
-- Reading: p. 20 - 30, 35 - 48
-
-**Friday**
-
-- *Bring laptops*
-- Activity: stratified sampling and simulation
-- Permutation tests
-- Reading: p. 48 - 68
+- Visual Cues
+- Reading: p. 14 - 22
 
 
-<!-- notes for later: bayesian model selection -->
+#### Week 2: Data Visualization II
+
+**Tuesday**
+
+- A grammar of graphics
+- ggplot2 
+- Reading: p. 33 - 48
+- Homework 1 due **before** class on thursday
+
+
+**Thursday**
+
+- Grammar of graphics, cont.
+- Review Homework 1
+- Projects
+- Reading:
+  - p. 48 - 58
+  - [Government is what we make of it](https://medium.com/civic-technology/government-is-what-you-make-of-it-d836a6a9353d)
+
+
+
