@@ -12,12 +12,13 @@ Math 241 | Reed College | Spring 2018
 - Principles of Data Graphics
 - Reading: p. 1 - 14
 - Please join the [slack group](https://join.slack.com/t/ds-civic-data/signup )
-- Please join [datacamp]()
+- Please join datacamp
 
 **Thursday**
 
 - Visual Cues
-- Reading: p. 14 - 22
+- Reading: p. 14 - 22, Tufte (see slack group)
+- Datacamp ggplot2 part I **due** Monday
 
 
 ### Week 2: Data Visualization II
@@ -27,7 +28,7 @@ Math 241 | Reed College | Spring 2018
 - A grammar of graphics
 - ggplot2 
 - Reading: p. 33 - 48
-- Homework 1 due **before** class on thursday
+- Homework 1 **due** by 4 pm on thursday
 
 
 **Thursday**
