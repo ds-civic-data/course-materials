@@ -10,6 +10,8 @@ Math 241 | Reed College | Spring 2018
 
 - Course Logistics
 - Principles of Data Graphics
+  - John Snow's Cholera Map ([link](https://upload.wikimedia.org/wikipedia/commons/2/27/Snow-cholera-map-1.jpg))
+  - Napoleon's March by Minard ([link](https://upload.wikimedia.org/wikipedia/commons/2/29/Minard.png))
 - Reading: p. 1 - 14
 - Please join the [slack group](https://join.slack.com/t/ds-civic-data/signup )
 - Please join datacamp
