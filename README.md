@@ -19,7 +19,9 @@ Math 241 | Reed College | Spring 2018
 **Thursday**
 
 - Visual Cues
-- Reading: p. 14 - 22, Tufte (see slack group)
+- Reading: 
+    + p. 14 - 22
+    + Tufte (see slack group)
 - Datacamp ggplot2 part I **due** Monday
 
 
@@ -29,7 +31,9 @@ Math 241 | Reed College | Spring 2018
 
 - A grammar of graphics
 - ggplot2 
-- Reading: p. 33 - 48
+- Reading:
+    + p. 33 - 48
+    + Gelman (see slack group)
 - Homework 1 **due** by 4 pm on thursday
 - Datacamp ggplot2 part II **due** by 5 pm on thursday
 
