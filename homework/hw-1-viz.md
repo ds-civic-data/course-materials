@@ -7,7 +7,7 @@ Exercise 2.5, 2.6, 3.3, 3.4, and 3.9
 
 ### Exercise 3.11
 
-The `fivethirtyeight` package is a treasure trove of the data that appears in the data journalism articles of . Select a data set that's interesting to you, create two informative plots, and describe what they reveal. It may be easiest to browse all of the dataset by looking through the (most but not all of these datasets will be available in the package).
+The `fivethirtyeight` package is a treasure trove of the data that appears in the data journalism articles of [fivethirtyeight.com](http://fivethirtyeight.com/). Select a data set that's interesting to you, create two informative plots, and describe what they reveal. It may be easiest to browse all of the dataset by looking through the [github repository](https://github.com/fivethirtyeight/data) (most but not all of these datasets will be available in the package).
 
 ### Notes
 
