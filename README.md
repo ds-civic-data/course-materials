@@ -34,7 +34,7 @@ Math 241 | Reed College | Spring 2018
 - Reading:
     + p. 33 - 48
     + Gelman (see slack group)
-- Homework 1 **due** by 4 pm on thursday
+- Homework 1 **due** by 5 pm on thursday
 - Datacamp ggplot2 part II **due** by 5 pm on thursday
 
 
