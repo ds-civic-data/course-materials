@@ -30,6 +30,8 @@ Once you're done with the assignment, commit any final changes to files and clic
 
 Homework is formally submitted by going to your repository on GitHub and creating a new issue (the issue tab is right under the repo name). The name of the issue should be "Review assignment X". The only text in the issue should be the name of your randomly assigned reviewer. When you click to create this issue, it will send an email to your reviewer letting them know it is ready. The reviewer will then access your repo on Github, read through the assignment file (the .md will be easiest to read), and provide written feedback in the issue.
 
+Your reviewer can be found [here](https://docs.google.com/spreadsheets/d/1y2AQAjJOAI87wmOvpcZwVeZQtkNKu68mqO9_I9bbGjE/edit?usp=sharing).
+
 ## General homework rubric
 
 The rubric below can used to review your own work (to be sure you have all the bases covered) and when providing feedback to others (for ideas on what to focus on).
