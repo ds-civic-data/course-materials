@@ -46,6 +46,27 @@ Math 241 | Reed College | Spring 2018
 - Reading:
   - p. 48 - 58
   - [Government is what we make of it](https://medium.com/civic-technology/government-is-what-you-make-of-it-d836a6a9353d)
+  
+
+### Week 3: Data Wrangling
+
+**Tuesday**
+
+- A grammar of wrangling
+- dplyr
+- Reading:
+    + p. 63 - 79
+- Homework 2 **due** by 5 pm on Friday
+- Datacamp dplyr **due** by 5 pm on Wednesday
+
+
+**Thursday**
+
+- Working with multiple tables
+- Review Homework 1
+- Projects
+- Reading:
+    + p. 79 - 88
 
 
 
