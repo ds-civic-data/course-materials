@@ -14,24 +14,6 @@ data journalism articles of [fivethirtyeight.com](http://fivethirtyeight.com/). 
 interesting to you, create two informative plots, and describe what they reveal. It 
 may be easiest to browse all of the dataset by looking through the [github repository](https://github.com/fivethirtyeight/data) (most but not all of these datasets will be available in the package).
 
-### Exercise 3.12
-
-For this exercise you'll be working with a random sample of the full oregon voter history file. They can be downloaded using the following code:
-
-```{r eval = FALSE}
-library(tidyverse)
-vote_particip <- read_csv("http://bit.ly/2l1bIxs")
-```
-
-Use this data to craft a visualization that sheds light on a question that you have about htis data. In addition to your visualization, please include some commentary that touches on issues such as:
-
-- your motivating question
-- what type of variables you're using (e.g. categorical vs. numeric)
-- wht you decided to map those variables to particular visual cues through aesthetics
-- why you used the geometry that you did
-- what additional tweaks you made (if any) to improve the clarity of the graphic (you may want to refer to Tufte's principles)
-- what does this graphic tell you about your motivating question?
-
 
 ### Notes
 

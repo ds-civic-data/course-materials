@@ -1,0 +1,184 @@
+---
+title: "Government is what you make of it"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# What does this have to do with anything?
+
+## What does this have to do with anything? {.build}
+
+- First in a series of readings that discuss civic data
+- Provides context for the paradigm that you'll be operating in for group projects
+- Use your HUM critical reading skills
+
+
+# Government is what you make of it
+
+## Context
+
+- What is this piece?
+- Who is the author?
+- Who is his audience?
+
+
+## Argument
+
+- How do you characterize his main thesis?
+- How does he support this thesis?
+
+
+## My take
+
+- We are in a new era where the capacity of a government to serve the citizens 
+can be increased through open data and civic engagement with that data. Advice to
+make that interaction successful:
+    + Open doors
+    + Create a sense of community
+    + back good people with real support
+    + Make it count
+  
+## Lingering questions?
+
+- What does the author expect to be the **value** of civic data?
+
+
+# ggplot2
+
+```{r, include=FALSE}
+library(tidyverse)
+set.seed(42)
+small <- diamonds %>% sample_n(1000)
+```
+
+##  {.build}
+What is the relationship between the carat of diamonds and their price, when you're
+comparing diamonds of the same cut quality?
+
+```{r, echo=FALSE}
+ggplot(small) + geom_point(aes(x = carat, y = price, colour = cut)) + scale_y_log10() + facet_wrap(~cut) + ggtitle("First example")
+```
+
+
+## A look at the code {.build}
+
+```{r, eval=FALSE}
+library(tidyverse)
+ggplot(small, aes(x = carat, y = price)) + 
+  geom_point(aes(colour = cut)) + 
+  scale_y_log10() + 
+  facet_wrap(~cut) + 
+  ggtitle("First example")
+```
+
+
+## Variations on syntax {.build}
+
+```{r eval = F}
+ggplot(small) + 
+  geom_point(aes(x = carat, y = price, colour = cut))
+```
+
+versus
+
+```{r eval = F}
+ggplot(small, aes(c = carat, y = price, colour = cut)) + 
+  geom_point()
+```
+
+
+## A subtlety to be aware of {.build}
+
+There is a difference between **setting** and **mapping** aesthetics.
+
+1. Mapping dynamically links data to aesthetics through `aes()`.
+1. Setting a parameter to a fixed value is done *outside* of `aes`.
+
+Don't mix!
+
+
+## 
+
+demo code
+
+```{r echo = FALSE, eval = FALSE}
+# Mapping versus setting
+p <- ggplot(small, aes(x = carat, y = price))
+p + geom_point(aes(colour = cut))
+p + geom_point(aes(colour = "paul"))
+p + geom_point(colour = "steelblue", size = .8)
+
+
+# Faceting
+p + geom_point() + 
+  facet_wrap(~cut)
+
+p + geom_point() + 
+  facet_wrap(~cut, nrow = 1)
+
+p + geom_point() + 
+  facet_wrap(~cut, ncol = 1)
+
+p + geom_point() + 
+  facet_grid(cut ~ color)
+```
+
+
+## ggplot2 vs base {.build}
+
+**Strengths**
+- Make beautiful graphics very fast.
+- Enforces best practices.
+- Easy to update/modify plots.
+- Make highly customized plots very efficiently.
+
+**Weaknesses**
+- No 3d plotting or dynamic plots (see `ggvis`).
+- Can be difficult for unorthodox plots.
+- Slower processing time.
+
+
+## Where to find these functions {.build}
+
+First decide a geometry that is appropriate for the data type and the
+relationship you're aiming to show.
+
+    http://docs.ggplot2.org/
+
+Once you settled on a geometry, you need to map data to aesthetics.
+You can also look for help.
+
+
+##  Activity 2
+
+**Carbon**: Take a look at the first few rows of the `CO2` dataset that is built-in to R.
+
+1. Make a scatterplot of concentration versus uptake for this dataset. 
+2. Add color to indicate which plant is associated with each datapoint.
+3. Connect the points with lines.
+4. Add size to indicate the type.
+
+
+##
+
+**Oregon Voter History**: For this exercise you'll be working with a random sample of the full oregon voter history file. They can be downloaded using the following code:
+
+```{r eval = FALSE}
+library(tidyverse)
+vote_particip <- read_csv("http://bit.ly/2l1bIxs")
+```
+
+Use this data to craft a visualization that sheds light on a question that you have about htis data. In addition to your visualization, please include some commentary that touches on issues such as:
+
+- your motivating question
+- what type of variables you're using (e.g. categorical vs. numeric)
+- wht you decided to map those variables to particular visual cues through aesthetics
+- why you used the geometry that you did
+- what additional tweaks you made (if any) to improve the clarity of the graphic (you may want to refer to Tufte's principles)
+- what does this graphic tell you about your motivating question?
+
+
+
