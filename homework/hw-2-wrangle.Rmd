@@ -16,7 +16,7 @@ Use the `babynames` data set to answer the following question:
 Address this question with a data visualization. My advice is to break this down into several deliberate (non R) steps:
 
 1. Start with pencil and paper to sketch out a plot that you think would capture this association well.
-2. Sketch out the rectangular data set that that would be needed to produce it, thinking about which columns you need and what the rows represent.
+2. Sketch out the rectangular data set that that would be needed to produce it, thinking about what the rows represent and which columns you need to do the aesthetic mappings to visual cues.
 3. Write out the data wrangling steps that are needed to get from `babynames` to the data set that is needed for that visualization.
 4. Once you have this pipeline sketched out, turn to R to implement it.
 
