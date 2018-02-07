@@ -56,15 +56,14 @@ Math 241 | Reed College | Spring 2018
 - dplyr
 - Reading:
     + p. 63 - 79
-- Homework 2 **due** by 5 pm on Friday
-- Datacamp dplyr **due** by 5 pm on Wednesday
+- Homework 2 **due** by 5 pm on next Tuesday
+- Datacamp dplyr **due** by 5 pm on next Tuesday
 
 
 **Thursday**
 
 - Working with multiple tables
-- Review Homework 1
-- Projects
+- Factors
 - Reading:
     + p. 79 - 88
 
