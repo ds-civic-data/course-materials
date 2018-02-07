@@ -171,7 +171,7 @@ library(tidyverse)
 vote_particip <- read_csv("http://bit.ly/2l1bIxs")
 ```
 
-Use this data to craft a visualization that sheds light on a question that you have about htis data. In addition to your visualization, please include some commentary that touches on issues such as:
+Use this data to craft a visualization that sheds light on a question that you have about this data. In addition to your visualization, please include some commentary that touches on issues such as:
 
 - your motivating question
 - what type of variables you're using (e.g. categorical vs. numeric)

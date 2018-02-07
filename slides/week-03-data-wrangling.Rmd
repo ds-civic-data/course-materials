@@ -1,0 +1,435 @@
+---
+title: "Week 3"
+output:
+  ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(babynames)
+```
+
+# Preliminaries
+
+## activity-3.Rmd {.build} 
+
+- Create `activity-3.Rmd` in your in-class directory
+- Use `output: github_document`
+- Insert in R chunk to load `tidyverse` and `babynames`
+
+
+## FYI: caching {.build}
+
+The output of r chunks can be cached (saved) so that they don't need to be re-run
+everytime you re-knit.
+
+```{r}
+#```{r compute-stuff, cache = TRUE}
+# my crazy intensive computing step
+#```
+```
+
+- You may want to add cached files to your .gitignore.
+- Labeling chunks can help with debugging
+- Many more chunk options are available (search: knitr chunk options)
+
+
+# Data Wrangling
+
+## Two paradigms {.build}
+
+### R
+```{r}
+cyl4s <- mtcars[mtcars$cyl == 4, ]
+mean(cyl4s$mpg)
+```
+
+### R with dplyr
+```{r}
+library(dplyr)
+cyl4s <- filter(mtcars, cyl == 4)
+summarize(cyl4s, mean = mean(mpg))
+```
+
+
+## R Subsetting {.build}
+
+```{r}
+cyl4s <- mtcars[mtcars$cyl == 4, ]
+```
+
+- Square brackets are used to subset dataframes.
+- `[rows, columns]`
+
+
+## R Summaries {.build}
+
+```{r}
+mean(cyl4s$mpg)
+```
+
+- Many commands operate on a *vector* (column) of data extracted from a dataframe
+using the `$`.
+
+
+## dplyr Subsetting {.build}
+
+```{r}
+cyl4s <- filter(mtcars, cyl == 4)
+```
+
+- `dplyr` contains separate functions to *filter* the rows and *select* the columns.
+- The dataframe is one argument and the column names are another (no `$`).
+
+```{r}
+cyl4s <- mtcars %>% filter(cyl == 4)
+```
+
+- Can also *chain* commands using the pipe.
+
+
+## dplyr Summaries {.build}
+
+```{r}
+summarize(cyl4s, mean = mean(mpg))
+```
+
+- Any numerical summary that you want to apply to a column of a dataframe
+is specified within `summarize()`.
+
+```{r}
+cyl4s %>% summarize(mean = mean(mpg))
+```
+
+- This, too, can be put into a chain.
+
+
+## Two paradigms
+
+### R
+```{r}
+cyl4s <- mtcars[mtcars$cyl == 4, ]
+mean(cyl4s$mpg)
+```
+
+### R with dplyr
+```{r}
+library(dplyr)
+cyl4s <- filter(mtcars, cyl == 4)
+summarize(cyl4s, mean = mean(mpg))
+```
+
+
+## Why dplyr? {.build}
+
+Data sets are often of high *volume* (lots of rows) and high *variety* (lots
+of columns). This is overwhelming to visualize and analyze, so we find ourselves
+chopping the data set up into more manageable and meaningful chunks. We also 
+often need to perform operations to organize and clean our data.
+
+This is all possible in base R, but with `dplyr`, it is **simple**, **readible**, 
+and **fast**.
+
+![](../figs/dplyr-hex.png)
+
+
+## The Five Verbs {.build}
+
+- `select()`
+- `filter()`
+- `mutate()`
+- `arrange()`
+- `summarize()`
+
+
+## Philosophy {.build}
+
+- Each verb takes a data frame and returns a data frame
+    + actually a `tbl_df`
+    + allows chaining with `%>%`
+- Idea:
+    + master a few simple commands
+    + use your creativity to combine them
+- Cheat sheet:
+    + https://rstudio.com/resources/cheatsheets
+
+## `select()`
+
+Subset the columns.
+
+<img src="../figs/select.png" width = "750">
+
+
+## `filter()`
+
+Subset the rows.
+
+<img src="../figs/filter.png" width = "750">
+
+
+## `mutate()`
+
+Add or modify a column.
+
+<img src="../figs/mutate.png" width = "750">
+
+
+## `rename()`
+
+Rename a column.
+
+<img src="../figs/rename.png" width = "750">
+
+
+## `arrange()`
+
+Sort the rows.
+
+<img src="../figs/arrange.png" width = "750">
+
+
+## `summarize()`
+
+Summarize column(s) into a single row.
+
+<img src="../figs/summarise.png" width = "750">
+
+
+## Activity 3.1
+
+- Add a new column to `babynames` that indicates whether or not the name proportion
+in that yearxgender was greater than 1%. Call that column `is_popular`.
+- Which are the least popular "popular" names?
+
+
+## Activity 3.1
+
+- Add a new column to `babynames` that indicates whether or not the name proportion
+in that yearxgender was greater than 1%. Call that column `is_popular`.
+- Which are the least popular "popular" names?
+
+```{r}
+babynames %>%
+  mutate(is_popular = prop > .01) %>%
+  filter(is_popular == TRUE) %>%
+  arrange(prop)
+```
+
+
+## Activity 3.2
+
+- Create a new object called `bella` that contains all instances of babies named
+"Bella" and all of the variables except `prop`.
+- What `class()` is this object?
+- Create a plot of the popularity of Bella over time.
+
+
+## Activity 3.2
+
+- Create a new object called `bella` that contains all instances of babies named
+"Bella" and all of the variables except `prop`.
+- What `class()` is this object?
+- Create a plot of the popularity of Bella over time.
+
+```{r}
+bella <- babynames %>%
+  select(year, sex, name, n) %>%
+  filter(name == "Bella")
+```
+
+or
+
+```{r}
+bella <- babynames %>%
+  select(-prop) %>%
+  filter(name == "Bella")
+class(bella)
+```
+
+
+## 
+
+```{r}
+babynames %>%
+  select(year, sex, name, n) %>%
+  filter(name == "Bella") %>%
+  ggplot(aes(x = year, y = n)) + 
+  geom_line(aes(color = sex))
+```
+
+
+# Composition
+
+## {.vcenter}
+
+![](../figs/magrittr-hex.png)
+
+
+## {.vcenter}
+
+![](../figs/this-is-not-a-pipe.jpg)
+
+- Pipe (`%>%`) is provided by the `magrittr` package
+- Inspired by pipe (`|`) in UNIX
+
+## Using the pipe {.build}
+
+The expression
+
+```{r eval = FALSE}
+mydata %>%
+  verb(arg1)
+```
+
+is the same as:
+
+```{r, eval = FALSE}
+verb(mydata, arg1)
+```
+
+- It takes the output of the leading function and drops it in as the first argument of the trailing function.
+- You can indicate the landing site with `.`
+
+## Why the pipe? {.build}
+
+Instead of having to read/write:
+
+```{r eval = FALSE}
+select(filter(mutate(data, arg1), arg2), arg3)
+```
+
+You can do:
+
+```{r eval = FALSE}
+data %>%
+  mutate(arg1) %>%
+  filter(arg2) %>%
+  select(arg3)
+```
+
+
+## Coding Little Bunny Foo Foo {.build}
+
+Nested form:
+
+```{r eval = FALSE}
+bop(scoop(hop(foo_foo, through = forest), up = field_mice, on = head))
+```
+
+With pipes:
+
+```{r eval = FALSE}
+foo_foo %>%
+  hop(through = forest) %>%
+  scoop(up = field_mice) %>%
+  bop(on = head)
+```
+
+More on that analogy:
+- https://github.com/hadley/r4ds/blob/master/pipes.Rmd
+
+
+# Practice
+
+## Activity 3.3
+
+- Without using `summarize()` or graphics, find the year in which your name was used
+most frequently.
+- What was the most popular name that year?
+
+
+## Activity 3.3
+
+- Without using `summarize()` or graphics, find the year in which your name was used
+most frequently.
+- What was the most popular name that year?
+
+```{r}
+babynames %>%
+  filter(name == "Andrew") %>%
+  arrange(desc(n))
+```
+
+## Activity 3.3
+
+- Without using `summarize()` or graphics, find the year in which your name was used
+most frequently.
+- What was the most popular name that year?
+
+```{r}
+babynames %>%
+  filter(year == 1987) %>%
+  arrange(desc(n))
+```
+
+
+# Aggregation
+
+## `group_by()`
+
+Indicate sub-groups of rows in a data set.
+
+<img src="../figs/group_by.png" width = "750">
+
+
+## `group_by()`
+
+Indicate sub-groups of rows in a data set.
+
+<img src="../figs/group_by.png" width = "750">
+
+
+## 
+
+Total number of names in each year
+
+```{r}
+babynames %>%
+  group_by(year) %>%
+  summarize(count = n())
+```
+
+
+
+
+## Activity 3.4
+
+- Which year had the greatest number of births?
+- In a single pipeline, compute the earliest and latest year that each name appears.
+
+
+## Activity 3.4
+
+- Which year had the greatest number of births?
+- In a single pipeline, compute the earliest and latest year that each name appears.
+
+```{r}
+babynames %>%
+  group_by(year) %>%
+  summarize(num_births = sum(n)) %>%
+  arrange(desc(num_births)) 
+```
+
+
+## Activity 3.4
+
+- Which year had the greatest number of births?
+- In a single pipeline, compute the earliest and latest year that each name appears.
+
+```{r}
+babynames %>%
+  group_by(name) %>%
+  summarize(earliest = min(year), latest = max(year))
+```
+
+
+## More . . .
+
+Choose two of the following exercises to add to your activity and also please post a graphic to slack (the last bullet).
+
+- **3.5**: Among popular names (let’s say at least 1% of the births in a given year), which name is the youngest—meaning that its first appearance as a popular name is the most recent?
+- **3.6**: It seems like there is more diversity of names now than in the past. How have the number of names used changed over time? Has it been the same for boys and girls?
+- **3.7**: Find the most popular names of the 1990s.
+- **3.8**: Which names have been given to M and F most equally?
+- Before class thursday, please create a visualization of this data set and post it (and it's code) to slack.
