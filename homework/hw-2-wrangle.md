@@ -9,7 +9,7 @@ Exercise 4.1 - 4.6. Important note: all references to the `nycflights13` package
 
 Use the `babynames` data set to answer the following question:
 
-*What is the association between the first name the US President and the use of that name as a baby name?*
+*What association is there between the first name the US President and the use of that name as a baby name?*
 
 Address this question with a data visualization. My advice is to break this down into several deliberate (non R) steps:
 
@@ -19,3 +19,5 @@ Address this question with a data visualization. My advice is to break this down
 4.  Once you have this pipeline sketched out, turn to R to implement it.
 
 If your visualization would be more informative with the inclusion of outside information, you are encouraging to track down and incorporate other data sets.
+
+After everyone has submitted, we will be voting to determine which visualization provides the most incisive answer to this question.
