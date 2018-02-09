@@ -433,3 +433,263 @@ Choose two of the following exercises to add to your activity and also please po
 - **3.7**: Find the most popular names of the 1990s.
 - **3.8**: Which names have been given to M and F most equally?
 - Before class thursday, please create a visualization of this data set and post it (and it's code) to slack.
+
+
+# From slack
+
+## {.smaller}
+
+<img src="../figs/baby1.png" width = "750">
+
+- **Message**: there is a greater diversity of names now than in the past.
+- The choice of measure matters a bit.
+
+
+## {.smaller}
+
+<img src="../figs/baby2.png" width = "450">
+
+- **Message**: Most of the 2015 popular names are relatively new. Exception: William.
+- Technique: focus on the long term trend of a subset that are remarkable in
+a smaller time interval.
+
+
+## {.smaller}
+
+<img src="../figs/baby3.png" width = "400">
+
+- **Message**: Biblical names are becoming rarer, though boys names got a bump 
+in the second half of the 20th century.
+
+
+## {.smaller}
+
+<img src="../figs/baby4.png" width = "650">
+
+- **Message**: Control for factors that you're not interested in.
+- *My curiosity here was seeing when there were the most people per name. It made sense to me that when there are less people there are less names, so I wanted to see at what era we essentially saw a population boom without a coinciding 'name quantity' boom.*
+
+
+# dplyr, some notes
+
+## `distinct()` {.build}
+
+Return the rows with duplicate labels.
+
+```{r}
+babynames %>%
+  distinct(name)
+```
+
+
+## So many n's
+
+```{r eval = FALSE}
+babynames %>%
+  filter(name == "Jackie") %>%
+  group_by(year) %>%
+  summarize(n(), 
+            sum(n), 
+            sum(ifelse(sex == "M", n, 0)))
+```
+
+What will this return?
+
+## So many n's
+
+```{r}
+babynames %>%
+  filter(name == "Jackie") %>%
+  group_by(year) %>%
+  summarize(n(), 
+            sum(n), 
+            sum(ifelse(sex == "M", n, 0)))
+```
+
+
+## Add clarity with names
+
+```{r}
+babynames %>%
+  filter(name == "Jackie") %>%
+  rename(n_births = n) %>%
+  group_by(year) %>%
+  summarize(number_of_rows = n(), 
+            n_total_births = sum(n_births), 
+            n_boy_births = sum(ifelse(sex == "M", n_births, 0)))
+```
+
+
+# Joins
+
+## Relational data
+
+Data that resides in multiple tables with relations that link observations between pairs of tables (often not a one-one relationship!).
+
+<img src="../figs/relational-nycflights.png" width = "550">
+
+- Extended reading: http://r4ds.had.co.nz/relational-data.html
+
+
+## 
+
+Consider two tables with rows identified by their **key**.
+
+<img src="../figs/join-tables.png" width = "650">
+
+
+## {.smaller}
+
+```{r}
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     3, "x3"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2",
+     4, "y3"
+)
+x
+y
+```
+
+
+## {.smaller .build}
+
+An **inner join** returns the rows that have a key in both tables, with the combined columns from both tables.
+
+<img src="../figs/join-inner.png" width = "650">
+
+```{r}
+x %>%
+  inner_join(y, by = c("key" = "key"))
+```
+
+
+## {.smaller .build}
+
+A **left join** returns the rows that have a key in the left table, with the combined columns from both tables, filling in NAs where there are no key matches in the right table.
+
+<img src="../figs/join-left.png" width = "650">
+
+```{r}
+x %>%
+  left_join(y, by = c("key" = "key"))
+```
+
+
+
+## {.smaller .build}
+
+A **right join** returns the rows that have a key in the right table, with the combined columns from both tables, filling in NAs where there are no key matches in the left table.
+
+<img src="../figs/join-right.png" width = "650">
+
+```{r}
+x %>%
+  right_join(y, by = c("key" = "key"))
+```
+
+
+## {.smaller .build}
+
+A **full join** returns the rows that have a key either table, with the combined columns from both tables, filling in NAs where there are no key matches in the corresponding table.
+
+<img src="../figs/join-full.png" width = "650">
+
+```{r}
+x %>%
+  full_join(y, by = c("key" = "key"))
+```
+
+
+## Joins as set operations
+
+<img src="../figs/join-venns.png" width = "650">
+
+Sometimes helpful but runs into problems when keys don't uniquely identify an observation.
+
+
+## Many to one {.smaller}
+
+```{r}
+x <- tribble(
+  ~key, ~val_x,
+     1, "x1",
+     2, "x2",
+     2, "x3",
+     1, "x4"
+)
+y <- tribble(
+  ~key, ~val_y,
+     1, "y1",
+     2, "y2"
+)
+x
+y
+```
+
+
+## What type of join is this?
+
+<img src="../figs/join-many-to-one.png" width = "650">
+
+
+## {.smaller .build}
+
+```{r}
+x %>%
+  inner_join(y, key = c("key", "key"))
+x %>%
+  right_join(y, key = c("key", "key"))
+```
+
+
+## {.smaller .build}
+
+```{r}
+x %>%
+  left_join(y, key = c("key", "key"))
+x %>%
+  full_join(y, key = c("key", "key"))
+```
+
+
+# Activity 4
+
+##
+
+In the `babynames` package there are actually several tables. Start by renaming `births`, which has data from the US Census.
+
+```{r}
+births
+census_births <- births
+```
+
+
+##
+
+The `babynames` data is from the social security administration. Let's subset (to make things interesting), then get it into the same form as `census_births`.
+
+```{r}
+ssa_births <- babynames %>%
+  filter(year < 2012) %>%
+  group_by(year) %>%
+  summarize(N = n(), births = sum(n))
+```
+
+
+## Activity 4 {.smaller}
+
+- **4.1**: Create a new table using an `inner_join()`. What does this table represent? What time span is covered by this table?
+- **4.2**: Create a new table using a `left_join()`. What does this table represent? What time span is covered by this table?
+- **4.3**: Create a new table using a `right_join()`. What does this table represent? What time span is covered by this table?
+- **4.4**: Which of the previous two tables has more missing values?
+- **4.5**: Create a new table using a `full_join()`. What does this table represent? What time span is covered by this table?
+- **4.6**: Using the most appropriate table, explore the fidelity between the SSA and Census counts. If they differ, why do you think this is?
+
+
