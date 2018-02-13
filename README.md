@@ -68,4 +68,19 @@ Math 241 | Reed College | Spring 2018
     + p. 79 - 88
 
 
+### Week 4: Tidy Data
+
+**Tuesday**
+
+- Di Cook: Tidy Data and Visual Inference
+- Homework 3 **due** by 5 pm on next Tuesday
+
+
+**Thursday**
+
+- Tidy Data
+- Reading:
+    + [Tidy Data, Hadley Wickham](http://vita.had.co.nz/papers/tidy-data.pdf)
+    + p. 91 - 104
+
 
