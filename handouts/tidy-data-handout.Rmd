@@ -1,0 +1,68 @@
+---
+title: "Tidy Data Activity"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+On the following page, there are 4 representations of the same data set concerning occurances of Tuberculosis in various countries.
+
+\begin{enumerate}
+\item For each of the representations, what are the \emph{observations} or \emph{cases}? These refer to specific, unique, and similar sorts of things.  What are the \emph{variables}? These should take the same sort of \emph{value} for each case.
+
+\vspace{9.5cm}
+
+\item Let's say you wanted to create a plot to visualize the change in the rate of TB infection in each country from 1999 to 2000. For each representation, how many \texttt{dplyr} commands would be needed to create a \texttt{rate} variable? How many commands would be needed to transform the data so that you could visualize the raw counts of TB cases in each country from 1999 to 2000?
+
+\end{enumerate}
+
+\newpage\null\thispagestyle{empty}\newpage
+
+```{r echo = FALSE}
+library(tidyverse)
+A <- table3
+B <- table2
+C <- table1
+D1 <- table4a
+D2 <- table4b
+```
+
+```{r}
+A
+B
+C
+```
+
+\newpage
+
+```{r}
+D1
+D2
+```
+
+\newpage
+
+# Tidy Data Practice
+
+For each of the following data sets,
+
+- decide on the type of reshape needed (\texttt{gather()} or \texttt{spread()}),
+- record the \emph{key} and \emph{value}, and 
+- sketch what the tidied data set would look like.
+
+\vspace{1cm}
+
+\includegraphics[width = 5in]{../figs/tidy-religion}
+
+\newpage
+
+\includegraphics[width = 5in]{../figs/tidy-weather}
+
+\vspace{5.5cm}
+
+\includegraphics[width = 5in]{../figs/tidy-billboard}
+
+
+
