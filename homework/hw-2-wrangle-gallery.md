@@ -85,3 +85,8 @@ Q
 -
 
 ![](../figs/baby-pres/q.png)
+
+R
+-
+
+![](../figs/baby-pres/r.png)
