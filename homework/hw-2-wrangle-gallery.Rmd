@@ -1,0 +1,55 @@
+---
+title: "Homework 2: Visualization Challenge"
+output: github_document
+---
+
+## A
+![](../figs/baby-pres/a.png)
+
+## B
+![](../figs/baby-pres/b.png)
+
+## C
+![](../figs/baby-pres/c.png)
+
+## D
+![](../figs/baby-pres/d.png)
+
+## E
+![](../figs/baby-pres/e.png)
+
+## F
+![](../figs/baby-pres/f.png)
+
+## G
+![](../figs/baby-pres/g.png)
+
+## H
+![](../figs/baby-pres/h.png)
+
+## I
+![](../figs/baby-pres/i.png)
+
+## J
+![](../figs/baby-pres/j.png)
+
+## K
+![](../figs/baby-pres/k.png)
+
+## L
+![](../figs/baby-pres/l.png)
+
+## M
+![](../figs/baby-pres/m.png)
+
+## N
+![](../figs/baby-pres/n.png)
+
+## O
+![](../figs/baby-pres/o.png)
+
+## P
+![](../figs/baby-pres/p.png)
+
+## Q
+![](../figs/baby-pres/q.png)
