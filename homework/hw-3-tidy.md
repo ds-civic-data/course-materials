@@ -1,0 +1,10 @@
+Homework 3: Tidy
+================
+
+### MDSR Exercises
+
+Exercises 5.1, 5.7
+
+### Exercise 5.15
+
+Return to one of the questions asked in an activity of the `babynames` data: which name, throughout it's history, has seen closest to a 50:50 usage rate between males and females? Answer this question by starting out by reshaping the data to separate out a column for the number of males and the separate column for the number of females.
