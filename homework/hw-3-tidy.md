@@ -3,7 +3,7 @@ Homework 3: Tidy
 
 ### MDSR Exercises
 
-Exercises 5.1, 5.7, TBA
+Exercises 5.1, 5.2, 5.7
 
 ### Exercise 5.15
 
