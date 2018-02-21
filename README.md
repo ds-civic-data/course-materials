@@ -82,5 +82,21 @@ Math 241 | Reed College | Spring 2018
 - Reading:
     + p. 91 - 104
     + [Tidy Data, Hadley Wickham](http://vita.had.co.nz/papers/tidy-data.pdf) You're also encouraged to read this paper. It's a bit dated - he has since reorganized these ideas into the `tidyr` package - but it's useful to see the original formulation.
+    
+    
+### Week 5: Data Import
+
+**Tuesday**
+
+- Tidy Data II
+- Writing functions
+- Data Import
+- Reading:
+    + p. 116 - 128
+
+
+**Thursday**
+
+- Project topics
 
 
