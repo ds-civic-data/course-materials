@@ -73,7 +73,7 @@ Math 241 | Reed College | Spring 2018
 **Tuesday**
 
 - Di Cook: Tidy Data and Visual Inference
-- Homework 3 **due** by 5 pm on next Tuesday
+- Homework 3 **due** by 5 pm on next Thursday
 
 
 **Thursday**
