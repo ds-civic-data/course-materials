@@ -1,0 +1,97 @@
+---
+title: "Homework 4: Import"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+
+### Overview
+
+To gain experience with the process of Data Import (with all its peculiarities) we'd like you to do the following:
+
+1. Find **two** novel data sets
+2. Import them into R
+3. Tidy them, if neeed
+4. Visualize
+5. Find **one** civic dataset, and complete steps 2-4 with that dataset. 
+
+To summarize, you are to find and import **two** datasets of your own choosing, and **one** civic dataset, and import, tidy (if needed) and create one visualization for each dataset. 
+
+### Finding the data
+
+The two sets that you will be working with should be of a type that you have never before brought into R. This is to get your outside of the lingua franca flat tiles that you're been reading in using the `readr` package (e.g. `read_csv()`). As a reminder, these could be:
+
+**Proprietary flat files**
+
+- STATA
+- SPSS
+- Minitab
+- Octave/Matlab
+- Excel
+- GoogleSheets
+
+**Relational Database**
+
+- MySQL
+- SQLite
+- Postgres
+
+**Hierarchical Data**
+
+- JSON
+- XML
+- (HTML)
+
+To start you in your hunt for data, you can explore the following links:
+
+- The ICPSR is the world's largest repository of social, behavioral, and economic data. [icpsr.umich.edu](http://www.icpsr.umich.edu)
+- Data.gov is the home of the U.S. government's open data. There is more information there than anyone can possibly absorb! [data.gov](https://www.data.gov/)
+- The Roper Center houses more than 50 years of public opinion data on a wide variety of political and social issues. There are surveys conducted in the 1930s! [ropercenter.uconn.edu](https://ropercenter.cornell.edu/)
+- Care about world development? The go to source for information on economic and social development indicators is the World Bank's data repository, [data.worldbank.org](data.worldbank.org)
+- One of the most exciting developments in data dissemination is the "Dataverse", a project started at Harvard University, but which has spread worldwide. Anyone can have a dataverse, and there are more than 2000 that you can browse.  [dataverse.org](dataverse.org)
+
+You're also welcome to find your own data, just be sure this is the first time you've read that type of data into R.  There are many, many more options for you to investigate, public and private, governmental and non-governmental. Good hunting!
+
+You might come across data that is not immediately available for download, but is instead available only through an application programming interface or API. An API is a set of protocols that you can use efficiently interact with a large database over the web. If you find data that's available via API, we encourage you to explore it - some of the most interesting data out there will be of this class (including Twitter data).
+
+### Import into R
+
+- Once you find a data set, you might be able to read it directly into R by providing the url (e.g. `read_csv("bit.ly/SEOj2")`) but most likely you will need to 
+    + download it to your computer
+    + upload it to RStudio
+    + read it in by providing it the correct path
+- If you are uploading data to the RStudio server, please create a `/data` folder in your `homework` folder and drop the data set there.  If your data set is small (< 10 megs), it should be find to commit send to GitHub.
+- If the data set is large, **do not commit the data set**. GitHub will chocke if you try to push a large data set. The best strategy is to open up the `.gitignore` file in RStudio and add a line of text that says `homework/data/`. If you keep your eye on the Git pane in the upper-right corner as you save this file, you should see all those data files disappear - they will no longer be tracked by Git. You can still compute with the data set in RStudio, make your homework Rmd file, and commit that to send off the GitHub.
+- Another useful tactic when computing with large data sets is to cache the output of your R chunks using the `cache = TRUE` option. Similar to the data, please **do not commit the cache folder**, just add it to your `.gitignore`.
+- You will almost certainly need to download and install a new package to read in your two new data sets. To find the right package, start off by googling around. If you still can't figure it out, ask on slack.
+
+
+### Tidy
+
+Once you see a new object pop up in your R environment, congratulations, your import step was successfull! At the least, you've brought *something* into R. To ensure it was what you were expecting, inspect your data (e.g. `str()`, `head()`, `View()`). If something is awry, you might need to go back and tweak your data import step.
+
+It's possible your data might already be in tidy format, in which case you're done. If it's not, `gather()` and `spread()` your way to a tidy, rectangular data file that you'd be able visualize and model.
+
+### Visualize
+
+Create a simple visualization that reveals an interesting trend or relationship in each data set.
+
+
+* * *
+
+### Civic Data
+
+Finally, we want you to follow all these steps with a civic data set. You may obtain campaign finance data from two sources, either the Federal Election Commission or the Oregon Secretary of State's "Orestar" system.
+
+You may select whatever subset of data that you find most interesting. For the FEC, you will immediately notice that you will want to choose a particular campaign "year"--please don't make this the 2018 campaign! For OreStar, you can similarly search by campaign year, type of election, and/or other criteria.
+
+FEC will provide you a .csv file, and OreStar will provide you and Excel sheet. You should know how to import these. Tidyding and visualizing will be the more challenging element.
+
+- FEC data are available at the FEC's campaign finance disclosure page [http://www.fec.gov/disclosure.shtml](http://www.fec.gov/disclosure.shtml)
+- OreStar is the Oregon campaign finance reporting system. The Orestar page is contained at (https://secure.sos.state.or.us/orestar/CommitteeSearchFirstPage.do?startup=2)[https://secure.sos.state.or.us/orestar/CommitteeSearchFirstPage.do?startup=2]
+

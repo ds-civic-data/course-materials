@@ -299,3 +299,323 @@ For the following exercises, use the `pnwflights14` dataset.
 
 <img src="../figs/json.png" alt="json" style="width:530px;height:500px;">
 
+
+# Importing Civic Data
+
+##
+
+[https://data.oregon.gov/Business/New-Businesses-Registered-Last-Month/esjy-u4fc](https://data.oregon.gov/Business/New-Businesses-Registered-Last-Month/esjy-u4fc)
+
+
+## Reading in data
+
+```{r}
+library(tidyverse)
+biz <- read_csv("../data/New_Businesses_Registered_Last_Month.csv")
+```
+```{r eval = FALSE}
+?read_csv
+```
+
+<img src="../figs/read-csv-help.png" alt="tsv" style="width:450px;height:350px;">
+
+
+## Exploring structure
+
+```{r}
+str(biz)
+```
+
+
+## Exploring structure
+
+```{r}
+glimpse(biz)
+```
+
+
+## Economic trends {.build}
+
+**Q1**: What is the trend in new business licenses over the last month?
+
+Are these distinct businesses?
+
+```{r}
+biz %>%
+  head(3)
+```
+
+## {.build}
+
+**Q1**: What is the trend in new business licenses over the last month?
+
+```{r}
+biz <- biz %>%
+    distinct(`Business Name`, .keep_all = TRUE)
+biz
+```
+
+
+## {.build}
+
+**Q1**: What is the trend in new business licenses over the last month?
+
+Here is our key column:
+
+```{r}
+class(biz$`Registry Date`)
+```
+
+But we'd like a data frame that can do this:
+
+```{r eval = FALSE}
+ggplot(biz, aes(x = date, y = count)) +
+  geom_line()
+```
+
+
+## Data classes in R
+
+- `integer`
+- `numeric`
+- `logical`
+- `character`
+- `factor`
+-  . . . and more . . .
+
+
+## Lubridate {.build .smaller}
+
+A package to represent datetime data, do operations on it, and output it in various formats.
+
+You can create `<date>` data using a variety of functions tailored to the format of the character string.
+
+```{r}
+library(lubridate)
+ymd("2018-02-22")
+mdy("February 22nd, 2018")
+dmy("22-Feb-2018")
+```
+
+## Lubridate {.build .smaller}
+
+You can create `<dttm>` (date time) data by extending the same syntax.
+
+```{r}
+mdy_hm("02/22/2018 06:26")
+```
+
+You can also cobble together a `<dttm>` from across multiple columns.
+
+```{r eval = FALSE}
+flights %>% 
+  select(year, month, day, hour, minute) %>% 
+  mutate(departure = make_datetime(year, month, day, hour, minute))
+```
+
+## Extracting components {.build .smaller}
+
+Once you have data represented as a date-time, it's easy to pull out components that you're interested in.
+
+```{r}
+now <- now()
+now
+day(now)
+hour(now)
+minute(now)
+second(now)
+```
+
+
+## Extracting components {.build}
+
+```{r}
+wday(now)
+wday(now, label = TRUE)
+wday(now, label = TRUE, abbr = FALSE)
+```
+
+
+## Operations on datetimes {.build}
+
+```{r}
+joy <- mdy(04272018) - today()
+class(joy)
+joy
+joy <- as.duration(joy)
+joy
+```
+
+- Note the difference between **durations**, **periods**, and **intervals**.
+
+
+## Activity 6
+
+Use `pnwflights14` to answer the following questions.
+
+1. Use the appropriate function to parse the following dates.
+```{r}
+d1 <- "January 1, 2010"
+d2 <- "2015-Mar-07"
+d3 <- "06-Jun-2017"
+d4 <- c("August 19 (2015)", "July 1 (2015)")
+d5 <- "12/30/14" # Dec 30, 2014
+```
+2. Using the `pnwflights14` flights data, on what day of the week should you leave `PDX` if you want to minimize the chance of a delay?
+
+
+## Back to businesses {.build}
+
+```{r}
+d <- dmy(biz$`Registry Date`)
+```
+```{r eval = FALSE}
+?dmy
+```
+
+<img src="../figs/lubridate-help.png" alt="tsv" style="width:450px;height:350px;">
+
+
+## Lubridate {.build}
+
+```{r}
+d <- mdy(biz$`Registry Date`)
+class(d)
+head(d)
+```
+
+
+
+## Back to that plot {.build}
+
+**Q1**: What is the trend in new business licenses over the last month?
+
+First a barchart.
+
+```{r}
+biz <- biz %>%
+  mutate(registry_date = mdy(`Registry Date`))
+ggplot(biz, aes(x = registry_date)) +
+  geom_bar()
+```
+
+
+## Back to that plot {.build}
+
+**Q1**: What is the trend in new business licenses over the last month?
+
+Let's try a line chart
+
+```{r}
+biz %>%
+  group_by(registry_date) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x = registry_date, y = count)) +
+  geom_line()
+```
+
+## Refined question{.build}
+
+**Q2**: What is the weekly cycle in new business licenses?
+
+```{r}
+biz %>%
+  mutate(day_of_week = wday(registry_date, label = TRUE)) %>%
+  ggplot(aes(x = day_of_week)) +
+  geom_bar()
+```
+
+
+## Analysis in review
+
+1. Download `.csv` file
+2. Upload to server
+3. Read data into R
+4. Remove duplicate listings
+5. Reformat registry date
+6. Construct plots
+
+
+# Working with HTML tables
+
+##
+
+
+
+```{r eval = FALSE}
+library(rvest)
+url <- "https://www.nytimes.com/interactive/2018/sports/olympics/medal-count-results-schedule.html?smid=tw-nytimes&smtyp=cur"
+tables <- url %>%
+  read_html() %>%
+  html_nodes("table")
+length(tables)
+tab1 <- html_table(tables[[1]])
+tab1 <- html_table(tables[[1]], header = TRUE)
+tab1_sep <- tab1 %>%
+  separate("Medal Count", 
+           into = c("country","country_code"), 
+           sep = -3)
+  
+olympics <- tab1_sep %>%
+  gather(Gold:Bronze, key = "medal", value = "count") %>%
+  uncount(count)
+
+olympics %>%
+  ggplot(aes(x = reorder(country))) +
+  geom_bar() +
+  coord_flip()
+
+olympics %>%
+  ggplot(aes(x = country)) +
+  geom_bar() +
+  coord_flip()
+
+str(olympics)
+olympics <- olympics %>%
+  mutate(country = factor(country))
+str(olympics)
+levels(olympics$country)
+
+olympics <- olympics %>%
+  mutate(country = reorder(country, Total))
+levels(olympics$country)
+
+olympics %>%
+  ggplot(aes(x = country)) +
+  geom_bar() +
+  coord_flip()
+
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip()
+
+olympics <- olympics %>%
+  mutate(medal = factor(medal, levels = c("Gold", "Silver", "Bronze")))
+
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_manual(values = cols)
+
+cols <- c("Gold" = "#CFB53B", "Silver" = "#E6E8FA", "Bronze" = "#8C7853")
+
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_manual(values = cols)
+
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_manual(values = cols) +
+  theme_bw()
+```
+
+```{r}
+as_date(now())
+```
+
