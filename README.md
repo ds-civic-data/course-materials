@@ -97,6 +97,23 @@ Math 241 | Reed College | Spring 2018
 
 **Thursday**
 
-- Project topics
+- Data Import
+- Data Types
+- Lubridate
+- Homework 4 **due** by next 5 pm next Thursday
 
+
+### Week 6: Ethics and Modeling
+
+**Tuesday**
+
+- Discussion: Ethics
+- Overview of Statistical Modeling
+- Reading:
+    + p. 131 - 144
+
+
+**Thursday**
+
+- TBD
 
