@@ -100,7 +100,7 @@ Math 241 | Reed College | Spring 2018
 - Data Import
 - Data Types
 - Lubridate
-- Homework 4 **due** by next 5 pm next Thursday
+- Homework 4 **due** by next 5 pm next Tuesday
 
 
 ### Week 6: Ethics and Modeling
