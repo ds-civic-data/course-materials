@@ -363,6 +363,7 @@ biz
 Here is our key column:
 
 ```{r}
+head(biz$`Registry Date`, 3)
 class(biz$`Registry Date`)
 ```
 
@@ -423,7 +424,6 @@ now
 day(now)
 hour(now)
 minute(now)
-second(now)
 ```
 
 
@@ -486,13 +486,13 @@ head(d)
 
 
 
-## Back to that plot {.build}
+## Back to that plot {.build .smaller}
 
 **Q1**: What is the trend in new business licenses over the last month?
 
 First a barchart.
 
-```{r}
+```{r fig.height=3}
 biz <- biz %>%
   mutate(registry_date = mdy(`Registry Date`))
 ggplot(biz, aes(x = registry_date)) +
@@ -500,13 +500,13 @@ ggplot(biz, aes(x = registry_date)) +
 ```
 
 
-## Back to that plot {.build}
+## Back to that plot {.build .smaller}
 
 **Q1**: What is the trend in new business licenses over the last month?
 
 Let's try a line chart
 
-```{r}
+```{r fig.height=3}
 biz %>%
   group_by(registry_date) %>%
   summarize(count = n()) %>%
@@ -514,11 +514,11 @@ biz %>%
   geom_line()
 ```
 
-## Refined question{.build}
+## Refined question {.build .smaller}
 
 **Q2**: What is the weekly cycle in new business licenses?
 
-```{r}
+```{r fig.height=3}
 biz %>%
   mutate(day_of_week = wday(registry_date, label = TRUE)) %>%
   ggplot(aes(x = day_of_week)) +
@@ -538,84 +538,320 @@ biz %>%
 
 # Working with HTML tables
 
-##
+
+## Web scraping
+
+Lots of interesting data lives out on the web as HTML tables.
+
+<img src="../figs/nyt-olympics.png" alt="tsv" style="width:700px;height:500px;">
 
 
+## Rvest {.build}
 
-```{r eval = FALSE}
+<img src="../figs/rvest.png" alt="tsv" style="width:85px;height:100px;">
+
+An R package for harvesting HTML data.
+
+```{r}
 library(rvest)
 url <- "https://www.nytimes.com/interactive/2018/sports/olympics/medal-count-results-schedule.html?smid=tw-nytimes&smtyp=cur"
+url %>%
+  read_html()
+```
+
+
+## Extracting HTML tables {.build}
+
+```{r}
 tables <- url %>%
   read_html() %>%
   html_nodes("table")
+class(tables)
 length(tables)
-tab1 <- html_table(tables[[1]])
-tab1 <- html_table(tables[[1]], header = TRUE)
+html_table(tables[[1]])
+```
+
+
+## What's that other table? {.build}
+
+```{r}
+html_table(tables[[2]])
+```
+
+
+## {.build .smaller}
+
+Bring in medal count as data frame.
+
+```{r}
+tab1 <-html_table(tables[[1]], header = TRUE)
+head(tab1, n = 3)
+```
+
+Todo: isolate the country name.
+
+```{r}
 tab1_sep <- tab1 %>%
   separate("Medal Count", 
            into = c("country","country_code"), 
            sep = -3)
-  
+head(tab1_sep)
+```
+
+
+## {.build}
+
+Reshape data into tall format in preparation for `ggplot`.
+
+```{r}
 olympics <- tab1_sep %>%
   gather(Gold:Bronze, key = "medal", value = "count") %>%
   uncount(count)
+olympics
+```
 
+
+## {.build .smaller}
+
+Let's plot.
+
+```{r}
 olympics %>%
-  ggplot(aes(x = reorder(country))) +
-  geom_bar() +
-  coord_flip()
+  ggplot(aes(x = country)) +
+  geom_bar()
+```
 
+
+## {.build .smaller}
+
+Long names are easier on the y-axis.
+
+```{r}
 olympics %>%
   ggplot(aes(x = country)) +
   geom_bar() +
   coord_flip()
+```
 
-str(olympics)
-olympics <- olympics %>%
-  mutate(country = factor(country))
-str(olympics)
-levels(olympics$country)
 
+## Thinking about order
+
+There are two approaches to order the bars:
+
+1. Manually rearrange the bars in the `ggplot()` directly.
+2. Address the ordering of the names in the underlying data representation.
+
+Let's do 2, which requires talking about `factors()`.
+
+
+## Factors {.smaller .build}
+
+Factors are a way to represent categorical data as integers that are looked up in a linked table of *levels*.
+
+```{r}
+a <- factor(olympics$country)
+class(a)
+levels(a)
+```
+
+
+##  {.smaller .build}
+
+```{r}
+tail(table(a))
+```
+
+
+## Adding a level {.smaller .build}
+
+```{r}
+b <- factor(olympics$country,
+            levels = c(levels(a), "Oregon"))
+tail(table(b))
+```
+
+
+## {.smaller .build}
+
+Let's use the factor class, but then set the order of the levels based on the `Total` number of medals.
+
+```{r}
 olympics <- olympics %>%
+  mutate(country = factor(country)) %>%
   mutate(country = reorder(country, Total))
 levels(olympics$country)
+```
 
+
+## Back to the plot {.smaller .build}
+
+```{r}
 olympics %>%
   ggplot(aes(x = country)) +
   geom_bar() +
   coord_flip()
+```
 
+How can we indicate the type of medal?
+
+
+## {.smaller .build}
+
+Map the `fill` to the `medal` column.
+
+```{r}
 olympics %>%
   ggplot(aes(x = country, fill = medal)) +
   geom_bar() +
   coord_flip()
+```
 
+Now what's wrong?
+
+
+## {.smaller .build}
+
+Gotta fix the ordering of the medals.
+
+```{r}
 olympics <- olympics %>%
-  mutate(medal = factor(medal, levels = c("Gold", "Silver", "Bronze")))
+  mutate(medal = factor(medal, 
+                        levels = c("Gold", "Silver", "Bronze")))
+levels(olympics$medal)
+```
 
+
+## Back to the plot {.smaller .build}
+
+```{r}
 olympics %>%
   ggplot(aes(x = country, fill = medal)) +
   geom_bar() +
-  coord_flip() +
-  scale_fill_manual(values = cols)
+  coord_flip()
+```
 
-cols <- c("Gold" = "#CFB53B", "Silver" = "#E6E8FA", "Bronze" = "#8C7853")
+But those colors....
 
-olympics %>%
-  ggplot(aes(x = country, fill = medal)) +
-  geom_bar() +
-  coord_flip() +
-  scale_fill_manual(values = cols)
 
+## Hunting for colors {.build}
+
+Colors are represented by name (`"papayawhip"`), RBG values, or hex code.
+
+<img src="../figs/color-codes.png" alt="tsv" style="width:600px;height:400px;">
+
+
+## Changing the scale {.build}
+
+```{r eval = FALSE}
+cols <- c("Gold" = "#CFB53B",
+          "Silver" = "#E6E8FA",
+          "Bronze" = "#8C7853")
 olympics %>%
   ggplot(aes(x = country, fill = medal)) +
   geom_bar() +
   coord_flip() +
   scale_fill_manual(values = cols) +
-  theme_bw()
+  theme_bw() +
+  xlab("")
 ```
 
-```{r}
-as_date(now())
+
+## Finished plot {.build}
+
+```{r echo = FALSE}
+cols <- c("Gold" = "#CFB53B",
+          "Silver" = "#E6E8FA",
+          "Bronze" = "#8C7853")
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_manual(values = cols) +
+  theme_bw() +
+  xlab("")
 ```
 
+
+## Full code pt. I
+
+```{r eval = FALSE}
+url <- "https://www.nytimes.com/interactive/2018/sports/olympics/medal-count-results-schedule.html?smid=tw-nytimes&smtyp=cur"
+now <- now()
+tables <- url %>%
+  read_html() %>%
+  html_nodes("table")
+olympics <- html_table(tables[[1]], header = T) %>%
+  separate("Medal Count", 
+           into = c("country","country_code"), 
+           sep = -3) %>%
+  gather(Gold:Bronze, key = "medal", value = "count") %>%
+  uncount(count) %>%
+  mutate(country = factor(country)) %>%
+  mutate(country = reorder(country, Total)) %>%
+  mutate(medal = factor(medal, levels = c("Gold", "Silver", "Bronze")))
+```
+
+
+## Full code pt. II
+
+```{r eval = FALSE}
+cols <- c("Gold" = "#CFB53B",
+          "Silver" = "#E6E8FA",
+          "Bronze" = "#8C7853")
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_manual(values = cols) +
+  theme_bw() +
+  xlab("") +
+  labs(title = "2018 Olympic Medals", 
+       subtitle = paste("(as of",
+                        month(now, label = T, abbr = F),
+                        day(now),
+                        ")"))
+```
+
+
+## Final final plot
+
+```{r echo = FALSE}
+cols <- c("Gold" = "#CFB53B",
+          "Silver" = "#E6E8FA",
+          "Bronze" = "#8C7853")
+olympics %>%
+  ggplot(aes(x = country, fill = medal)) +
+  geom_bar() +
+  coord_flip() +
+  scale_fill_manual(values = cols) +
+  theme_bw() +
+  xlab("") +
+  labs(title = "2018 Olympic Medals", 
+       subtitle = paste("(as of",
+                        month(now, label = T, abbr = F),
+                        day(now),
+                        ")"))
+```
+
+
+## Analysis in review
+
+1. Identify table of interest on the web.
+2. Read in with `rvest`.
+3. Find the correct table to extract as dataframe.
+4. Separate, reshape, and reorder to facilitate viz.
+5. Construct visualization.
+
+**Advice**
+Be wary when web scraping! It has several notable downsides:
+
+- Violation of terms of use
+- Brittle code
+
+Best alternative: application programmer interface (API).
+
+
+# Activity 6
+
+3. Recreate the Olympic Medals plot but instead of countries, compare Americas, Europe, and Asia.
+4. Find a HTML table of interest on wikipedia, bring it into R and create a visualization.
