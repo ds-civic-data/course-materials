@@ -43,8 +43,8 @@ To start you in your hunt for data, you can explore the following links:
 -   The ICPSR is the world's largest repository of social, behavioral, and economic data. [icpsr.umich.edu](http://www.icpsr.umich.edu)
 -   Data.gov is the home of the U.S. government's open data. There is more information there than anyone can possibly absorb! [data.gov](https://www.data.gov/)
 -   The Roper Center houses more than 50 years of public opinion data on a wide variety of political and social issues. There are surveys conducted in the 1930s! [ropercenter.uconn.edu](https://ropercenter.cornell.edu/)
--   Care about world development? The go to source for information on economic and social development indicators is the World Bank's data repository, [data.worldbank.org](data.worldbank.org)
--   One of the most exciting developments in data dissemination is the "Dataverse", a project started at Harvard University, but which has spread worldwide. Anyone can have a dataverse, and there are more than 2000 that you can browse. [dataverse.org](dataverse.org)
+-   Care about world development? The go to source for information on economic and social development indicators is the World Bank's data repository, [data.worldbank.org](https://data.worldbank.org/)
+-   One of the most exciting developments in data dissemination is the "Dataverse", a project started at Harvard University, but which has spread worldwide. Anyone can have a dataverse, and there are more than 2000 that you can browse. [dataverse.org](https://dataverse.org/)
 
 You're also welcome to find your own data, just be sure this is the first time you've read that type of data into R. There are many, many more options for you to investigate, public and private, governmental and non-governmental. Good hunting!
 
@@ -71,6 +71,3 @@ Here we'll define civic data as a data set collected at the neighborhood (Woodst
 -   [City of Portland Bureaus](https://www.portlandoregon.gov/26003)
 -   [Portland Civic Apps](http://civicapps.org/datasets/)
 -   [Portland Spatial Data](http://gis-pdx.opendata.arcgis.com/)
-
--   FEC data are available at the FEC's campaign finance disclosure page <http://www.fec.gov/disclosure.shtml>
--   OreStar is the Oregon campaign finance reporting system. The Orestar page is contained at (<https://secure.sos.state.or.us/orestar/CommitteeSearchFirstPage.do?startup=2>)\[<https://secure.sos.state.or.us/orestar/CommitteeSearchFirstPage.do?startup=2>\]
