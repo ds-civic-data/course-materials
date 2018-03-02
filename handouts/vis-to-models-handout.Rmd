@@ -1,0 +1,39 @@
+---
+title: "From Visualization to Modeling"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
+diamonds <- sample_n(diamonds, 10000)
+```
+
+The `diamonds` data set contains observations of over 50,000 diamonds. In the following, we focus on a sample of 10,000 diamonds and the relationship between their `log(price)`, their `carat` (size), and their `cut` (quality of the diamond). Look carefully at the following graphics and summarize the relationship that you see in a **single sentence**. Note that the last two plots are two ways to view the same variables, form a single sentence for both plots.
+
+```{r}
+ggplot(diamonds, aes(x = carat, y = log(price))) +
+  geom_point(alpha = .2)
+```
+
+```{r}
+ggplot(diamonds, aes(x = cut, y = log(price))) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(diamonds, aes(x = carat, y = log(price))) +
+  geom_point(aes(color = cut), alpha = .5)
+```
+
+\newpage
+
+```{r fig.height=3}
+ggplot(diamonds, aes(x = carat, y = log(price))) +
+  geom_point(alpha = .2) +
+  facet_wrap(~cut, nrow = 1)
+```
+
+
+
+
