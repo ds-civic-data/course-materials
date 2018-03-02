@@ -108,12 +108,31 @@ Math 241 | Reed College | Spring 2018
 **Tuesday**
 
 - Discussion: Ethics
-- Overview of Statistical Modeling
 - Reading:
     + p. 131 - 144
 
 
 **Thursday**
 
-- TBD
+- Overview of Modeling
+- Linear Regression
+- Reading:
+    + p. 
+
+
+### Week 7: Modeling, cont.
+
+**Tuesday**
+
+- Logistic Regression
+- Reading:
+    + p. 131 - 144
+
+
+**Thursday**
+
+- Overview of Modeling
+- Linear Regression
+- Reading:
+    + p. 
 
