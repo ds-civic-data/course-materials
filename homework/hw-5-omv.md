@@ -29,13 +29,13 @@ Your task in this assignment is to create a dataset containing a sample of 100,0
 
 The full data files can be downloaded by sending a browser to [this link](https://www.dropbox.com/sh/udb9vudyt77810o/AAAXQJd4k0wBn1ec3H8Q7RQta?dl=0).
 
-This is a zip-file that is about 140 MB compressed. You'll want to put the contents of this file into a new subdirectory of your `hw_5_omv` directory called `data`. A couple of very important things to note:
+This is a zip-file that is about 140 MB compressed. You'll want to put the contents of this file into a new subdirectory of your `homework` directory called `data`. A couple of very important things to note:
 
 -   These are **very large** data files. Downloading them only your computer will take up nearly 1 gig of harddrive space. Loading into R will take up a ton of RAM. That is to say, if you worry about your computer's ability to work with this data, you may want to do this assignment from one of the computers in ETC.
 -   This assignment will be more painless if you do it on the desktop version of RStudio (either on your own computer or on the ETC computers) than on the RStudio server. This will save you from having to turn around and upload these large data files to the server.
 -   Once you get to the point in the assignment where you have take the sample of 100,000 rows of the data frame, then you can save and upload that data set to the server along with the Rmd file that you used to do all the wrangling and tidying.
--   Regardless of if you work on your own laptop or one in ETC, on a desktop version of RStudio or on the server, please **do not commit the data set**. GitHub will choke if you try to push this data set. The best strategy is to open up the `.gitignore` file in RStudio and add a line of text that says `hw_5_omv/data/`. If you keep your eye on the Git pane in the upper-right corner as you save this file, you should see all those data files disappear - they will no longer be tracked by Git.
--   Another useful tactic will be to cache the output of your r chunks using the `cache = TRUE` option. Similar to the data, please **do not commit the cache folder**, just add it to your `.gitignore`.
+-   Regardless of if you work on your own laptop or one in ETC, on a desktop version of RStudio or on the server, please **do not commit the data set**. GitHub will choke if you try to push this data set. The best strategy is to right click on the data file in the git pane and click "ignore". If you keep your eye on the Git pane in the upper-right corner as you save the `.gitignore`, you should see all those data files disappear - they will no longer be tracked by Git.
+-   Another useful tactic will be to cache the output of your R chunks using the `cache = TRUE` option. Similar to the data, please **do not commit the cache folder**, just add it to your `.gitignore`.
 
 Once you have the data files on your computer and not tracked by Git, there are several steps to create your sample of untidy data.
 
