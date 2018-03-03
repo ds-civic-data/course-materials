@@ -509,10 +509,39 @@ summary(mC)</pre>
 
 </article></slide><slide class=""><hgroup><h2>A different question</h2></hgroup><article  id="a-different-question" class="build smaller">
 
-<p>What is the relationship between <code>log(price)</code> and <code>log(carat)</code> when controlling for <code>cut</code>?</p>
+<p>What is the relationship between <code>log(price)</code> and <code>cut</code>?</p>
 
-<pre class = 'prettyprint lang-r'>mD &lt;- lm(log(price) ~ log(carat) + cut, data = diamonds)
+<pre class = 'prettyprint lang-r'>mD &lt;- lm(log(price) ~ cut, data = diamonds)
 summary(mD)</pre>
+
+<pre >## 
+## Call:
+## lm(formula = log(price) ~ cut, data = diamonds)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -2.27336 -0.89757 -0.00737  0.77876  2.20246 
+## 
+## Coefficients:
+##              Estimate Std. Error  t value Pr(&gt;|t|)    
+## (Intercept)  7.865035   0.006443 1220.692  &lt; 2e-16 ***
+## cut.L       -0.252970   0.017259  -14.658  &lt; 2e-16 ***
+## cut.Q        0.020014   0.015384    1.301    0.193    
+## cut.C       -0.211855   0.013387  -15.825  &lt; 2e-16 ***
+## cut^4       -0.077633   0.010795   -7.192 6.48e-13 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.005 on 53935 degrees of freedom
+## Multiple R-squared:  0.01814,    Adjusted R-squared:  0.01806 
+## F-statistic: 249.1 on 4 and 53935 DF,  p-value: &lt; 2.2e-16</pre>
+
+</article></slide><slide class=""><hgroup><h2>A different question</h2></hgroup><article  id="a-different-question-1" class="build smaller">
+
+<p>What is the relationship between <code>log(price)</code> and <code>cut</code> when controlling for <code>log(carat)</code>?</p>
+
+<pre class = 'prettyprint lang-r'>mE &lt;- lm(log(price) ~ log(carat) + cut, data = diamonds)
+summary(mE)</pre>
 
 <pre >## 
 ## Call:
@@ -537,13 +566,57 @@ summary(mD)</pre>
 ## Multiple R-squared:  0.9371, Adjusted R-squared:  0.9371 
 ## F-statistic: 1.607e+05 on 5 and 53934 DF,  p-value: &lt; 2.2e-16</pre>
 
+</article></slide><slide class=""><hgroup><h2>A different question</h2></hgroup><article  id="a-different-question-2" class="build smaller">
+
+<p>What is the relationship between <code>log(price)</code> and <code>cut</code> when controlling for <code>log(carat)</code>?</p>
+
+<pre class = 'prettyprint lang-r'>d2 &lt;- diamonds %&gt;% 
+  mutate(cut = factor(cut, ordered = FALSE))
+mF &lt;- lm(log(price) ~ log(carat) + cut, data = d2)
+summary(mF)</pre>
+
+<pre >## 
+## Call:
+## lm(formula = log(price) ~ log(carat) + cut, data = d2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.52247 -0.16484 -0.00587  0.16087  1.38115 
+## 
+## Coefficients:
+##              Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  8.200125   0.006343 1292.69   &lt;2e-16 ***
+## log(carat)   1.695771   0.001910  887.68   &lt;2e-16 ***
+## cutGood      0.163245   0.007324   22.29   &lt;2e-16 ***
+## cutVery Good 0.240753   0.006779   35.52   &lt;2e-16 ***
+## cutPremium   0.238217   0.006716   35.47   &lt;2e-16 ***
+## cutIdeal     0.317212   0.006632   47.83   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.2545 on 53934 degrees of freedom
+## Multiple R-squared:  0.9371, Adjusted R-squared:  0.9371 
+## F-statistic: 1.607e+05 on 5 and 53934 DF,  p-value: &lt; 2.2e-16</pre>
+
 </article></slide><slide class=""><hgroup><h2>Summary</h2></hgroup><article  id="summary" class="build">
 
 <ul>
 <li>Models are more extensible and formal way to describe relationships in data</li>
 <li>The quality of your prediction and/or inference is dependent on a wise choice of model</li>
 <li>Think about models as a <em>specific answer</em> to a <em>specific question</em>.</li>
-</ul></article></slide>
+<li>Coefficient estimates will change based on which variables you add to the model.</li>
+<li>Be sure to distinguish between <em>statistical significance</em> and <em>practical significance</em>.</li>
+</ul>
+
+</article></slide><slide class=""><hgroup><h2>Activity (in pairs)</h2></hgroup><article  id="activity-in-pairs">
+
+<p>The <code>SatatogaHouses</code> data set in the <code>mosaicData</code> package provides information on 1728 houses that sold in Saratoga County, NY in 2006.</p>
+
+<ol>
+<li>Formulate a question that can be answered with this data set.</li>
+<li>Create a visualization of the data relevant to that question (using 3 - 5 variables).</li>
+<li>Fit a formal linear model relevant to that question.</li>
+</ol></article></slide>
 
 
   <slide class="backdrop"></slide>

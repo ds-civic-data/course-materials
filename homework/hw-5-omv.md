@@ -1,0 +1,65 @@
+Homework 5: Oregon Motor Voter
+================
+
+### Overview
+
+Oregon is unusual in that it has recently passed the Oregon Motor Voter law, whereby anyone who conducts business at the Oregon DMV is automatically registered to vote. Our primary question of interest is: **What impact has the motor voter law had on voter turnout?**
+
+To answer this question we turn to a rich source of public data regarding voting in Oregon. There are three primary files that we will use.
+
+-   Oregon voter history
+-   Oregon voter registration
+-   A list of Oregon "motor voter" registrants
+
+Your task in this assignment is to create a dataset containing a sample of 100,000 observations from the population of all registered voters. The variables to record on each of those voters include:
+
+1.  voter ID
+2.  whether or not the voter was registered via motor voter
+3.  county
+4.  birth date
+5.  eff\_regn\_date
+6.  party code
+7.  zip code
+8.  precinct
+9.  proportion of times the voter has voted in elections
+10. confidential
+11. status
+
+### Import
+
+The full data files can be downloaded by sending a browser to [this link](https://www.dropbox.com/sh/udb9vudyt77810o/AAAXQJd4k0wBn1ec3H8Q7RQta?dl=0).
+
+This is a zip-file that is about 140 MB compressed. You'll want to put the contents of this file into a new subdirectory of your `hw_5_omv` directory called `data`. A couple of very important things to note:
+
+-   These are **very large** data files. Downloading them only your computer will take up nearly 1 gig of harddrive space. Loading into R will take up a ton of RAM. That is to say, if you worry about your computer's ability to work with this data, you may want to do this assignment from one of the computers in ETC.
+-   This assignment will be more painless if you do it on the desktop version of RStudio (either on your own computer or on the ETC computers) than on the RStudio server. This will save you from having to turn around and upload these large data files to the server.
+-   Once you get to the point in the assignment where you have take the sample of 100,000 rows of the data frame, then you can save and upload that data set to the server along with the Rmd file that you used to do all the wrangling and tidying.
+-   Regardless of if you work on your own laptop or one in ETC, on a desktop version of RStudio or on the server, please **do not commit the data set**. GitHub will choke if you try to push this data set. The best strategy is to open up the `.gitignore` file in RStudio and add a line of text that says `hw_5_omv/data/`. If you keep your eye on the Git pane in the upper-right corner as you save this file, you should see all those data files disappear - they will no longer be tracked by Git.
+-   Another useful tactic will be to cache the output of your r chunks using the `cache = TRUE` option. Similar to the data, please **do not commit the cache folder**, just add it to your `.gitignore`.
+
+Once you have the data files on your computer and not tracked by Git, there are several steps to create your sample of untidy data.
+
+1.  Read the files into R which can be done with functions found in the `readr` package. Details on the data import process can be found [here](http://r4ds.had.co.nz/data-import.html). Important questions to consider include:
+    -   Is there a header with the column names?
+    -   What is the delimiter? Common ones include commas, spaces, and tabs.
+    -   What is the character for missing data?
+2.  Select off the columns of interest.
+3.  Combine all of the files into a single dataframe.
+4.  Set a seed (use `set.seed(241)`) then take a random sample of 100,000 rows of the full data set. Call this data set `voter_sample`.
+5.  To clear up some RAM on your computer, remove any objects in your R environment that you are no longer using. This can be done with the `rm()` function.
+
+### Tidy
+
+`voter_sample` is unfortunately quite messy. Your job is to tidy it up. Ask yourself: which rules of tidy data are violated here? Which operations are needed to recast the data into a tidy format? What is the current unit of observation and what is the unit of observations that I am aiming for?
+
+A useful tip: `select` off the columns you're interested in before executing either `spread` or `gather`. Both of these commands can result in an enlarged data set with duplicate information, so better to slim it down as much as possible beforehand.
+
+### Hints
+
+As we discussed in class this week, working with unfamiliar and "messy" data can be frustrating and take some trial and error. It is good practice to experiment a bit in the console before putting commands into your .Rmd file and running the full script.
+
+1.  Examine one of the raw data files in a text editor such as TextWrangler, VIM, or another program so that you have a sense of what the data look like.
+2.  Try reading in just one of the voter history files first to figure out which `read_` command you want to use. Experiment!
+3.  Immediately remove all extraneous information from the file by using `select`. If you have looked at the file carefully in step (1), you should already know what columns of information to keep and which you can discard.
+4.  Once you successfully read in the data, experiment with the `select` and `gather` in the console
+5.  When you are comfortable processing one file, then go back and try to read two files and `bind` them together. Try steps (2)-(4) again with two files ... then move on to writing and debugging your script.
