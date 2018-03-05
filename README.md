@@ -117,7 +117,7 @@ Math 241 | Reed College | Spring 2018
 - Overview of Modeling
 - Linear Regression
 - Reading:
-    + p. 
+    + p. 465 - 477
 
 
 ### Week 7: Modeling, cont.
@@ -126,13 +126,12 @@ Math 241 | Reed College | Spring 2018
 
 - Logistic Regression
 - Reading:
-    + p. 131 - 144
+    + p. 477 - 481, 188 - 196
 
 
 **Thursday**
 
-- Overview of Modeling
-- Linear Regression
+- Projects
 - Reading:
     + p. 
 
