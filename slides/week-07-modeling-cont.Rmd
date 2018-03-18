@@ -1,0 +1,414 @@
+---
+title: "Week Seven: Modeling"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+library(tidyverse)
+```
+
+## Activity 6 {.smaller}
+
+```{r eval = F}
+http://bit.ly/2oOdqlV # voter_sample.csv
+http://bit.ly/2I9CFaC # voter_tidy.csv
+```
+
+Data Integrity checks:
+
+1. How have the number of people registered changed over time?
+2. What is the distribution of ages within the full file? Within OMV?
+3. Did anyone register before age 18?
+4. Anyone double registered?
+
+Data Exploration:
+
+1. What is the relationship between party identification and voter proportion?
+2. Do metro areas have different party breakdown than rural areas?
+3. What is the relationship between age and voter participation when controlling for
+party?
+4. How do those registered by OMV compare to those not registered by OMV?
+
+
+##
+
+```{r eval = FALSE}
+voter_sample <- read_csv("http://bit.ly/2oOdqlV")
+voter_tidy <- read_csv("http://bit.ly/2I9CFaC")
+library(lubridate)
+voter_tidy %>%
+  mutate(birth_year = year(mdy(BIRTH_DATE)),
+         age = 2016 - birth_year) %>%
+  filter(PARTY_CODE %in% c("REP", "DEM", "NAV")) %>%
+  sample_n(10000) %>%
+  ggplot(aes(x = age, y = vote_prop, col = factor(PARTY_CODE))) +
+  geom_point(alpha = .3) +
+  stat_smooth() +
+  xlim(c(0, 100))
+```
+
+
+##
+
+```{r echo = FALSE, warning=FALSE}
+voter_sample <- read_csv("http://bit.ly/2oOdqlV")
+voter_tidy <- read_csv("http://bit.ly/2I9CFaC")
+library(lubridate)
+voter_tidy %>%
+  mutate(birth_year = year(mdy(BIRTH_DATE)),
+         age = 2016 - birth_year) %>%
+  filter(PARTY_CODE %in% c("REP", "DEM", "NAV")) %>%
+  sample_n(10000) %>%
+  ggplot(aes(x = age, y = vote_prop, col = factor(PARTY_CODE))) +
+  geom_point(alpha = .3) +
+  stat_smooth() +
+  xlim(c(0, 100))
+```
+
+Is this age?
+
+
+# Regression
+
+## Focus on the precinct {.build}
+
+Let's go back pre-voter_sample and create a data set where
+
+- unit of observation is the **precinct**
+- we're only looking at the 2016 election.
+
+Why would we do this?
+
+- ease of computing
+- merge with precinct-level information
+- now we're talking about voter turnout
+
+
+## Focus on the precinct I {.build}
+
+```{r echo = TRUE, eval = FALSE, warning = FALSE, message = FALSE}
+library(DescTools)
+wd <- getwd()
+setwd("../../omv/or_voter_history")
+
+filenames <- list.files(pattern = "2017.txt")
+files <- lapply(filenames,read_delim, 
+                col_types = paste(rep("c", 65), collapse = ""),
+                delim = "\t", 
+                escape_double = FALSE, 
+                trim_ws = TRUE)
+
+vs <- bind_rows(files)
+rm(files)
+```
+
+
+## Focus on the precinct II {.build}
+
+```{r echo = TRUE, eval = FALSE}
+or_precinct <- vs %>%
+  select(PARTY_CODE, COUNTY, BIRTH_DATE, `11/08/2016`, PRECINCT) %>%
+  mutate(age_at_election = (mdy(BIRTH_DATE) %--% 
+                            mdy("11/08/2016")) %/% 
+                            years(1)) %>%
+  group_by(COUNTY, PRECINCT) %>%
+  summarize(p_vote    = mean(`11/08/2016` == "YES", na.rm = TRUE),
+            avg_age   = mean(age_at_election, na.rm = TRUE),
+            p_NAV     = mean(PARTY_CODE == "NAV", na.rm = TRUE),
+            party_div = Gini(as.factor(PARTY_CODE)),
+            count     = n()) %>%
+  mutate(metro = COUNTY %in% c("MULTNOMAH", "CLACKAMAS", 
+                               "WASHINGTON", "LANE", "BEND"))
+setwd(wd)
+write_csv(or_precinct, "or_precinct.csv")
+```
+
+
+##  {.build}
+
+```{r message = FALSE}
+or_precinct <- read_csv("../../omv/or_precinct.csv")
+head(or_precinct)
+```
+
+```{r}
+or_precinct <- filter(or_precinct, COUNTY != "ACP")
+```
+
+## {.build}
+
+What is the relationship between `p_vote` and `avg_age`?
+
+```{r}
+ggplot(or_precinct, aes(x = avg_age, y = p_vote)) +
+  geom_point(alpha = .3)
+```
+
+## {.build}
+
+Some sensible filtering.
+
+```{r}
+or_precinct <- filter(or_precinct, count > 10)
+```
+
+
+## {.build}
+
+What is the relationship between `p_vote` and `avg_age`?
+
+```{r}
+ggplot(or_precinct, aes(x = avg_age, y = p_vote)) +
+  geom_point(alpha = .3)
+```
+
+
+## {.build .smaller}
+
+What is the relationship between `p_vote` and `avg_age`?
+
+```{r}
+m1 <- lm(p_vote ~ avg_age, data = or_precinct)
+summary(m1)
+```
+
+## {.build}
+
+What is the relationship between `p_vote` and `p_NAV`?
+
+```{r}
+ggplot(or_precinct, aes(x = p_NAV, y = p_vote)) +
+  geom_point(alpha = .3)
+```
+
+## {.build .smaller}
+
+What is the relationship between `p_vote` and `p_NAV`?
+
+```{r}
+m2 <- lm(p_vote ~ p_NAV, data = or_precinct)
+summary(m2)
+```
+
+## {.build}
+
+What is the relationship between `p_vote` and `metro`?
+
+```{r}
+ggplot(or_precinct, aes(x = metro, y = p_vote)) +
+  geom_boxplot()
+```
+
+## {.build .smaller}
+
+What is the relationship between `p_vote` and `metro`?
+
+```{r}
+m3 <- lm(p_vote ~ metro, data = or_precinct)
+summary(m3)
+```
+
+## {.build}
+
+What is the relationship between `p_vote` and `party_div`?
+
+```{r warning = FALSE}
+ggplot(or_precinct, aes(x = party_div, y = p_vote)) +
+  geom_point(alpha = .3)
+```
+
+## {.build .smaller}
+
+What is the relationship between `p_vote` and `party_div`?
+
+```{r}
+m4 <- lm(p_vote ~ party_div, data = or_precinct)
+summary(m4)
+```
+
+## {.build}
+
+What is the relationship between `p_vote` and `p_NAV` when controlling for `metro`?
+
+```{r}
+ggplot(or_precinct, aes(x = avg_age, y = p_vote, color = metro)) +
+  geom_point(alpha = .3)
+```
+
+## {.build .smaller}
+
+What is the relationship between `p_vote` and `p_NAV` when controlling for `metro`?
+
+```{r}
+m5 <- lm(p_vote ~ p_NAV + metro, data = or_precinct)
+summary(m5)
+```
+
+## {.build}
+
+What is the relationship between `p_vote` and `p_NAV` when controlling for `avg_age`?
+
+```{r message = FALSE}
+library(plotly)
+(p <- plot_ly(or_precinct, x = ~p_NAV, y = ~avg_age, 
+        z = ~p_vote, colors = '#BF382A', opacity = .3, marker = list(size = 3)) %>%
+  add_markers())
+```
+
+## {.build .smaller}
+
+What is the relationship between `p_vote` and `p_NAV` when controlling for `avg_age`?
+
+```{r}
+m6 <- lm(p_vote ~ p_NAV + avg_age, data = or_precinct)
+summary(m6)
+```
+
+
+## {.build}
+
+```{r message = FALSE, warning = FALSE, echo = FALSE}
+library(reshape2)
+#Graph Resolution (more important for more complex shapes)
+graph_reso <- 0.05
+
+#Setup Axis
+axis_x <- seq(0, 1, by = graph_reso)
+axis_y <- seq(min(or_precinct$avg_age), max(or_precinct$avg_age), by = graph_reso)
+
+#Sample points
+lm_surface <- expand.grid(p_NAV = axis_x, avg_age = axis_y, KEEP.OUT.ATTRS = F)
+lm_surface$p_vote <- predict.lm(m6, newdata = lm_surface)
+lm_surface <- acast(lm_surface, avg_age ~ p_NAV, value.var = "p_vote")
+
+add_trace(p,
+          z = lm_surface,
+          x = axis_x,
+          y = axis_y,
+          type = "surface") %>% layout(showlegend = FALSE)
+```
+
+
+# Classification
+
+
+## Example: Credit Default
+
+```{r}
+library(ISLR)
+head(Default)
+```
+
+
+## Exploratory Data Analysis
+
+```{r, echo = FALSE, fig.height = 3.5}
+library(ggplot2)
+library(gridExtra)
+p1 <- ggplot(Default, aes(x = default, y = balance)) +
+  geom_boxplot() + 
+  coord_flip() +
+  theme_bw()
+
+p2 <- ggplot(Default, aes(x = default, y = income)) +
+  geom_boxplot() + 
+  coord_flip() +
+  theme_bw()
+
+grid.arrange(p1, p2, ncol=2)
+```
+
+
+## Model Fitting
+
+```{r}
+m1 <- glm(default ~ balance, data = Default, family = binomial)
+coef(m1)
+```
+
+
+## Logistic Model
+
+$$ \hat{P}(Y = 1) = \frac{1}{1 + e^{-(-10.65 + 0.0055 x_i)}} $$
+
+```{r, echo = FALSE, message=FALSE}
+library(dplyr)
+Default <- mutate(Default, defaultYes = ifelse(default == "Yes", 1, 0))
+  
+p3 <- ggplot(Default, aes(x = balance, y = defaultYes)) +
+  geom_point(pch = 1, alpha = .3, color = "steelblue") + 
+  ylab("probability of default") + 
+  theme_bw()
+
+p3
+```
+
+
+## Logistic Model
+
+$$ \hat{P}(Y = 1) = \frac{1}{1 + e^{-(-10.65 + 0.0055 x_i)}} $$
+
+```{r, echo = FALSE}
+balance <- seq(0, max(Default$balance), length.out = 500)
+y <- predict(m1, newdata = data.frame(balance), type = "response")
+p_y <- data.frame(balance, y)
+
+p3 + geom_line(data = p_y, aes(x = balance, y = y), lwd = 1.3, col = "grey45")
+```
+
+## 
+```{r}
+summary(m1)$coef
+```
+
+Where did those SEs come from?
+
+
+# Multiple Logisitic Regression
+
+## Add student as a predictor?
+
+```{r echo=FALSE}
+ggplot(Default, aes(x = student, y = balance)) +
+  geom_boxplot() + 
+  coord_flip() +
+  theme_bw()
+```
+
+
+##
+
+```{r}
+m2 <- glm(default ~ balance + student, data = Default, family = binomial)
+summary(m2)$coef
+```
+
+What's going on?
+
+
+##
+
+```{r echo = FALSE}
+balance <- rep(seq(0, max(Default$balance), length.out = 500), 2)
+student <- c(rep("Yes", 500), rep("No", 500))
+y <- predict(m2, newdata = data.frame(balance, student), type = "response")
+p_y <- data.frame(balance, student, y)
+
+p3 + geom_line(data = p_y, aes(x = balance, y = y, color = student), lwd = 1.3)
+```
+
+
+# Activity
+
+## Oregon voters
+
+Using `http://bit.ly/2oOdqlV` (voter_sample.csv), build a model to answer the following question:
+
+What is the association between age and whether or not someone voted in the November 2016 election, after controlling for political party?
+
+
+
+
+
+
