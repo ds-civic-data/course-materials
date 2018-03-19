@@ -124,14 +124,25 @@ Math 241 | Reed College | Spring 2018
 
 **Tuesday**
 
+- Guest: Paul Gronke, Q&A about voter registration and participation in Oregon
+- Activity: Data Validation and EDA
+
+
+**Thursday**
+
 - Logistic Regression
 - Reading:
     + p. 477 - 481, 188 - 196
 
 
+### Week 8: Modeling, Projects
+
+**Tuesday**
+
+- Project brainstorm (brainstorm **due** by 4 pm today)
+- Modeling with Logistic Regression
+
+
 **Thursday**
 
-- Projects
-- Reading:
-    + p. 
-
+- GitHub Workshop
