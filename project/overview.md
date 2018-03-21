@@ -6,6 +6,8 @@
     -   [Assignment 2: Proposal](#assignment-2-proposal)
 -   [Workflow](#workflow)
 -   [Deliverables](#deliverables)
+    -   [Deliverable formats](#deliverable-formats)
+    -   [Structure](#structure)
 -   [Symposium](#symposium)
 
 Civic Data Project
@@ -53,7 +55,24 @@ Please submit, as activity 7, these 4 questions across two domains, along with i
 
 ### Assignment 2: Proposal
 
-TBA
+-   General theme that you wish you address
+-   Specific questions you may address along with your expectation of what you may find
+-   Relevant work
+-   Identify client/stakeholders and their contact information
+-   Describe the data
+    -   Source with citation
+    -   Data structure / size
+    -   Observational unit
+    -   Types of variables
+    -   Confidentiality/privacy concerns
+-   Vision for deliverable
+    -   Visualizations
+    -   Models
+    -   Data
+    -   Format
+        -   White paper (Rmd document)
+        -   Software (R package)
+        -   Website (Shiny App)
 
 Workflow
 ========
@@ -61,5 +80,61 @@ Workflow
 Deliverables
 ============
 
+The primary deliverable is a public GitHub repository that presents your investigation in a transparent and reproducible manner. This repo will showcase the
+
+### Deliverable formats
+
+The project topic areas are quite open-ended, so the most effective format for communicating the results of your work will vary. Listed below are possible formats that you may use. Examples of each can be found in the project repos from last year's course.
+
+1.  White paper
+2.  R package
+3.  Website (Shiny app)
+
+### Structure
+
+Every repository should follow a similar structure, shown below. Also see [](www.github.com/ds-elections) for examples.
+
+![](../figs/model-repo.png)
+
+#### Raw Data
+
+This folder would contain the raw data files scraped directly from their source and unaltered, as well as the programs used to tidy them. Files that go in here are files that are not used directly in any kind of analysis. For example, in the OMV project, this file would contain the raw voter files as well as the code used to clean it into the format used for the actual analysis.
+
+Only include data files that a) are not huge in size and that b) will not violate law or ethics to post publicly.
+
+#### Data
+
+This folder would contain all the files used directly in analysis or in the final project.
+
+#### Sandbox
+
+This folder would contain code and work that is not yet finished, corresponding to the general exploring/understanding phase of the data science work flow. Files in here will typically be code, and will be moved out of this file into the code file as they are completed and working.
+
+#### Code
+
+This folder would contain the code used in any analysis performed in the project. This would include the code to make visualizations, models, and any other analysis done.
+
+#### Documents
+
+The documents folder would contain the final analysis, or the main deliverable(s) that the repo is dedicated to.
+
+For standard social science projects this folder would contain the final white paper, as well as a visualizations sub folder that would contain image files.
+
+For a project more focused on building a tool, such as an r pacakge, the documents folder would contain a file that shows examples of the code being used.
+
+#### Miscellaneous
+
+This would contain any files that don't fit into the descriptions of the above folders.
+
+#### Other Files (Not a Folder)
+
+The README file will contain the information needed for someone to get a good preliminary understanding of what the project is as well as how the repo is organized. This file should contain the names of people involved, the sources of data, and a general guide for where things are stored in the repo.
+
 Symposium
 =========
+
+Our Civic Data Symposium is a gathering to share what we've learned from the group projects with the wider community. The event will take place between 6 and 9 pm on Thursday May 10th in Vollum Lounge. In addition to the members of this class, the wider student/faculty/staff community will be invited, as will be members of the Portland community with an interest in civic data.
+
+The first half of the symposium will features 5 minute presentations by each group to provide an overview of their project and their findings. This presentation will be accompanied by just two slides. The second half of the symposium will be a poster session, where groups spend time near their posters and answer questions as people circulate through the room and read the posters.
+
+This symposium is a terrific opportunity to communicate your work to an engaged audience, many of whom will have experience working in related areas. To summarize, you will be preparing two components for this event: a 5 minute overview with 2 slides and a poster.
