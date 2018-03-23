@@ -1,0 +1,89 @@
+---
+title: "Week Eight: Projects"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warnings = FALSE, message = FALSE)
+library(tidyverse)
+```
+
+# Modeling
+
+## Assessing Model Fit {.build .smaller}
+
+There are several techniques used to assess how good of a fit your model is to the data. We walk through just one technique here: assessing predictive accuracy using test-train.
+
+The first step is to partition the *rows* of your full data set into two smaller data sets: one used to fit the model (training set) and another used to assess its predictive power (test set).
+
+```{r}
+library(ISLR)
+set.seed(47283)
+train_indices <- sample(1:nrow(Default), size = 6700, replace = FALSE)
+default_train <- slice(Default, train_indices)
+default_test  <- slice(Default, -train_indices)
+```
+
+
+## Fitting the model {.build .smaller}
+
+Now that we have our two separate data sets, we fit our model to the *training set*.
+
+```{r}
+m1 <- glm(default ~ balance, data = default_train, family = binomial)
+```
+
+If you check, you'll notice the coefficient estimates are similar to the model fit to the full model, but not the exact same.
+
+```{r}
+m0 <- glm(default ~ balance, data = Default, family = binomial)
+summary(m0)$coef
+summary(m1)$coef
+```
+
+
+## Predicting on the test data {.build .smaller}
+
+We can use this model to predict values for the test set using the `predict()` function.
+
+```{r}
+y <- predict(m1, newdata = default_test, type = "response")
+head(y)
+```
+
+To get that final prediction, we have to compare them to a threshold.
+
+```{r}
+default_test <- default_test %>%
+  mutate(p_hat        = y,
+         pred_default = p_hat > .5)
+```
+
+
+## Confusion matrix {.build .smaller}
+
+Finally we can form a *confusion matrix* that tabulates how many times our model predicted correctly and incorrectly for each case.
+
+```{r}
+table(default_test$default, default_test$pred_default)
+```
+
+That's using base R. For the tidyverse equivalent:
+
+```{r}
+confusion_mat <- default_test %>%
+  group_by(default, pred_default) %>%
+  tally()
+```
+
+
+## Misclassification Rate {.build .smaller}
+
+The confusion matrix gives a sense of the proportion of time our model is wrong in both directions. We can summarize that in a single number by calculating the *misclassification rate*.
+
+```{r}
+false_pos <- confusion_mat[2, 3]
+false_neg <- confusion_mat[4, 3]
+total_obs <- nrow(default_test)
+(mcr <- (false_pos + false_neg)/total_obs)
+```

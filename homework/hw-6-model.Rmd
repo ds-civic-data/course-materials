@@ -1,0 +1,78 @@
+---
+title: "Homework 6: Modeling OMV"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, eval = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+### Overview
+
+Oregon is unusual in that it has passed the Oregon Motor Voter law, whereby anyone who conducts business at the Oregon DMV is automatically registered to vote. Our primary question of interest is: *What impact did the motor voter law have on voter turnout in the 2016 election?*
+
+This is an *inferential* question that you'll be answering with a *classification model* (namely, logistic regression) applied to the Oregon voter data. For this homework, focus on the following models:
+
+Model 1: `vote ~ omv`
+
+Model 2: `vote ~ omv + age`
+
+Model 3: `vote ~ omv + age + I(age^2)`
+
+Model 4: `vote ~ omv + age + I(age^2) + party`
+
+Model 5:  A model of your own specification. It should at least have `vote` as a response and `omv` as one of the predictors. For the other predictors, you're welcome to use any of the other predictors in this data set, polynomials, interactions, and additional data joined in from other data sets.
+
+* * *
+
+### The Data
+
+For this homework, work with the following data set, which is very similar to the one that you generated in the last homework.
+
+```{r eval = FALSE}
+library(tidyverse)
+voter_sample <- read_csv("http://bit.ly/2oOdqlV")
+```
+
+You may want to do a bit of cleaning (eliminating unused variables, renaming variables) before proceeding with your modeling. Note that you will need to create the `age` variable, which can be done smoothly using the `lubridate` package. You'll also need to craft the response a bit to get it in the right shape for a classification model: a bernoulli variable that captures whether or not someone voted in the 2017 presidential election.
+
+
+### Fitting models
+
+The workhorse function for logistic regression models in R is `glm()` for generalized linear model. For the credit default example in class, we fit that model using the following:
+
+```{r, eval = FALSE}
+library(ISLR)
+head(Default)
+m1 <- glm(default ~ balance, data = Default, family = binomial)
+```
+
+Once you have fit the model, there is a lot of information about that model that you now have access to.
+
+```{r, eval = FALSE}
+m1
+summary(m1)
+coef(m1)
+names(m1)
+```
+
+I recommend that you run through this at the console to become comfortable with the functions, then apply them to the Oregon Voter History file to fit the models of interest.
+
+## Assessing Model Fit
+
+There are several techniques that can be used to assess how well these models are capturing the structure in the data. For the purpose of this homework, just use one: the misclassication rate.
+
+Consult the slides from class to implement a test-train scheme to compute the misclassification rate for each of these models. You're welcome to utilize slightly more sophisticated schemes including k-fold cross-validation and leave-one-out cross-validation.
+
+
+### Interpretation
+
+1. How do your 4 models compare in terms of what they say about the association between `age` and `vote`?
+2. How do your 4 models compare in terms of misclassification rate?
+3. How confident are you that these models capture the causal relationship between `omv` and `vote`? If you are skeptical, what are some confounding variables that you think might be factoring into this process?
+4. Please write 1 - 3 paragraphs explaining the general relationship of voting, age, party, omv in terms that someone without statistical expertise can understand. You may want to include graphics or tabular materials in this write up.
+
+
+
