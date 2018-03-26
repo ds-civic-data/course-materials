@@ -407,8 +407,3 @@ Using `http://bit.ly/2oOdqlV` (voter_sample.csv), build a model to answer the fo
 
 What is the association between age and whether or not someone voted in the November 2016 election, after controlling for political party?
 
-
-
-
-
-
