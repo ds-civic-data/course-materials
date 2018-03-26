@@ -60,7 +60,7 @@ Consult the slides from class to implement a test-train scheme to compute the mi
 
 ### Interpretation
 
-1.  How do your 4 models compare in terms of what they say about the association between `age` and `vote`?
-2.  How do your 4 models compare in terms of misclassification rate?
+1.  How do your models compare in terms of what they say about the association between `age` and `vote`?
+2.  How do your models compare in terms of misclassification rate?
 3.  How confident are you that these models capture the causal relationship between `omv` and `vote`? If you are skeptical, what are some confounding variables that you think might be factoring into this process?
 4.  Please write 1 - 3 paragraphs explaining the general relationship of voting, age, party, omv in terms that someone without statistical expertise can understand. You may want to include graphics or tabular materials in this write up.
