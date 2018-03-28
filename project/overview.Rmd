@@ -47,9 +47,13 @@ Please submit, as activity 7, these 4 questions across two domains, along with i
 
 ### Assignment 2: Proposal
 
+A list of project topics can be found [here](https://docs.google.com/document/d/106DX_mB95qy91LfW4CFEvsVCkjXLAeVL5k5vbWkXo3g/edit?usp=sharing). Please specify your preferences for projects [here](https://docs.google.com/forms/d/e/1FAIpQLSfec-hgE1gjXUOsLhRz0sM6GpcaPGeUYbnerLmYJ3FKKOK-Zw/viewform?usp=sf_link).
+
+By class on Thursday, please push to your shared group repository a proposal in .md format containing the following information (a bulleted list is fine).
+
 - General theme that you wish you address
 - Specific questions you may address along with your expectation of what you may find
-- Relevant work
+- Relevant work (at least 3)
 - Identify client/stakeholders and their contact information
 - Describe the data
     + Source with citation
