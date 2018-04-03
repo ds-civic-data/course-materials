@@ -146,3 +146,28 @@ Math 241 | Reed College | Spring 2018
 **Thursday**
 
 - GitHub Workshop
+
+
+### Week 9: Projects
+
+**Tuesday**
+
+- Groups assigned
+- Construct group repo and start on proposal
+
+
+**Thursday**
+
+- No class: group meetings
+
+
+### Week 10: Spatial Data
+
+**Tuesday**
+
+- Working with spatial data
+
+
+**Thursday**
+
+- TBA
