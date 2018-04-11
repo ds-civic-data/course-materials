@@ -200,12 +200,16 @@ grep("Thane of [F|G]", macbeth, value = TRUE)
 
 ## Activity 8A
 
-Write out the regex that will do the following:
-
 1. Identify first lines spoken by Lady Macbeth, Macbeth, or Macduff.
 2. Match everything in the left column and nothing in the right.
 
-<img src="../figs/regex-1.png" height="160" width="200">
+<img src="../figs/regex-1.png" height="120" width="150">
+
+Using the `babynames` data,
+
+3. Find the top ten boys' names that end in a vowel.
+4. Create two top ten lists - one for boys and one for girls - for names ending with "joe", "jo", "Joe", or "Joe".
+5. Find the name/names that involve the greatest number of consecutive consonants.
 
 
 ## Protip
@@ -321,15 +325,15 @@ Select a different Shakespeare play and answer the same three questions.
 2. How many times does Macbeth speak?
 3. Who speaks the most?
 
+Instead of worry about bringing in URLs, use a package.
 
+```{r eval = FALSE}
+library(gutenbergr)
+gutenberg_works(author == "Shakespeare, William")
+gutenberg_works(title == "Macbeth")
+macbeth <- gutenberg_download(1533)
+```
 
-## Activity 8
-
-Using the `babynames` data,
-
-1. Find the top ten boys' names that end in a vowel.
-2. Create two top ten lists - one for boys and one for girls - for names ending with "joe", "jo", "Joe", or "Joe".
-3. Find the name/names that involve the greatest number of consecutive consonants.
 
 
 
