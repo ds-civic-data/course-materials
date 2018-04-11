@@ -9,6 +9,9 @@ output: github_document
 ## B
 ![](../figs/B.png)
 
+## C
+![](../figs/C.png)
+
 ## D
 ![](../figs/D.png)
 

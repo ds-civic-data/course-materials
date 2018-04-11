@@ -11,6 +11,11 @@ B
 
 ![](../figs/B.png)
 
+C
+-
+
+![](../figs/C.png)
+
 D
 -
 
