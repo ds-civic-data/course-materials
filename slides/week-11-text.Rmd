@@ -198,9 +198,11 @@ grep("Thane of [F|G]", macbeth, value = TRUE)
 ```
 
 
-## Activity 8A
+## Activity 8A {.smaller}
 
-1. Identify first lines spoken by Lady Macbeth, Macbeth, or Macduff.
+Write out a regular expression that will,
+
+1. Identify all of the times that Lady Macbeth, Macbeth, Lady Macduff or Macduff speak.
 2. Match everything in the left column and nothing in the right.
 
 <img src="../figs/regex-1.png" height="120" width="150">
