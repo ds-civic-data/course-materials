@@ -32,7 +32,7 @@ library(tidyverse)
 
 ##
 
-<img src="../figs/bad-map.jpg" height="600" width="800">
+<img src="../figs/bad-map.png" height="600" width="800">
 
 
 ## This to be wary of
