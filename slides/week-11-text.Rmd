@@ -324,8 +324,8 @@ ggplot(speaker_freq, aes(x = line, y = speak)) +
 Select a different Shakespeare play and answer the same three questions.
 
 1. How long is this play?
-2. How many times does Macbeth speak?
-3. Who speaks the most?
+2. How many times does the main character speak?
+3. What is the pattern of speaking for the most prominent characters?
 
 Instead of worry about bringing in URLs, use a package.
 
@@ -337,5 +337,568 @@ macbeth <- gutenberg_download(1533)
 ```
 
 
+#
 
 
+## 
+
+<img src="../figs/regex-tester.png" height="600" width="800">
+
+
+##
+
+<img src="../figs/regex-tester.png" height="600" width="800">
+
+
+#
+
+
+## Building a tidy workflow {.build}
+
+Common data structures for text:
+
+- **String**: Text data is first read into R in this form, as a vector of characters.
+- **Corpus**: Contain raw strings annotated with additional metadata and details.
+- **Document-term matrix**: A sparse matrix describing a collection (i.e., a corpus) of documents with one row for each document and one column for each term. The value in the matrix is typically word count or tf-idf (see Chapter 3).
+
+
+## Tidy data {.build}
+
+Hadley Wickham defined tidy data as being a table where:
+
+- Each variable is a column
+- Each observation is a row
+- Each type of observational unit is a table
+
+For tidy *text* data, the observational unit will be a **token**. This is done very smoothly via `tidytext` (free text: https://www.tidytextmining.com/)
+
+
+## Tokens {.build}
+
+A **token** is an atomic unit of textual analysis. It can be a:
+
+- word
+- character
+- ngrams
+- sentence
+- lines
+- paragraph
+- regrex
+
+In the course of an analysis, you might consider several different types of tokens.
+
+
+## {.build}
+
+```{r}
+library(tidytext)
+a
+macdf <- data_frame(line = 1:length(a), text = a) # not data.frame!
+macdf
+```
+
+
+## {.build}
+
+```{r}
+macdf %>%
+  unnest_tokens(output = word, input = text, token = "words", to_lower = TRUE)
+```
+
+
+## A tidytext workflow
+
+<img src="../figs/tidytext-workflow.png" height="170" width="750">
+
+
+## Macbeth vs Lady Macbeth {.build}
+
+Let's analyze the word frequencies used by Macbeth and Lady Macbeth. Let's break this down into steps.
+
+1. `unnest_token()` based on speech
+2. `filter()` for Macbeth and Lady Macbeth
+3. `unnest_token()` based on words
+4. `count()` word frequencies
+5. `ggplot()` them using `geom_bar()`.
+
+
+## Tokenize by speech {.smaller .build}
+
+**Activity 9**: We want to tokenize by splitting on strings like `MACBETH.` and `BANQUO.`. What's an appropriate regex?
+
+```{r}
+speaker_pat <- "[A-Z]{4,}\\."
+library(stringr)
+speakers <- grep(pattern = speaker_pat, x = macbeth[279:3170], value = TRUE) %>%
+  str_extract(speaker_pat)
+table(speakers)
+```
+
+
+## {.smaller .build}
+
+### Alternate approach
+
+```{r}
+start <- grep("Dramatis Personae", macbeth)
+macbeth[start:(start + 25)]
+```
+
+## {.smaller .build}
+```{r}
+(speakers <- grep(pattern = "[A-Z]{4,}",
+                 x = macbeth[start:(start + 25)], value = TRUE) %>%
+  str_extract("[A-Z]{4,}"))
+```
+
+How can we improve this?
+
+```{r}
+(speakers <- grep(pattern = "[A-Z]{4,}\\s?[A-Z]*",
+                 x = macbeth[start:(start + 25)], value = TRUE) %>%
+  str_extract("[A-Z]{4,}\\s?[A-Z]*"))
+```
+
+## Tokenize by speech {.smaller .build}
+
+```{r}
+(roster <- paste0("(", paste(speakers, collapse = "\\.)|("), "\\.)"))
+macdf <- data_frame(text = macbeth[279:3170]) %>%
+  na.omit()
+turns <- macdf %>%
+  unnest_tokens(output = text, input = text, token = "regex", pattern = roster)
+dim(turns)
+slice(turns, n()) 
+```
+
+
+##  {.smaller .build}
+
+How different is our tokenize-by-roster data from the tokenize-by-CAPS data?
+
+```{r}
+speaker_pat
+turns_alt <- macdf %>%
+  unnest_tokens(output = text, input = text, token = "regex", pattern = speaker_pat)
+dim(turns_alt)
+slice(turns_alt, n())
+```
+
+
+## Macbeth vs Lady Macbeth
+
+Let's analyze the word frequencies used by Macbeth and Lady Macbeth. Let's break this down into steps.
+
+1. `unnest_token()` based on speech
+2. `filter()` for Macbeth and Lady Macbeth
+3. `unnest_token()` based on words
+4. `count()` word frequencies
+5. `ggplot()` them using `geom_bar()`.
+
+What other issues might have been created during tokenizing in step 1?
+
+
+## Filtering {.build}
+
+`filter()` for Macbeth and Lady Macbeth.
+
+```{r}
+turns %>%
+  filter()
+```
+
+What do we filter based on?
+
+
+## Appending speaker {.smaller .build}
+
+```{r}
+speaker <- grep(pattern = roster,
+                 x = macdf$text, value = TRUE) %>%
+  str_extract(roster)
+head(speaker)
+length(speaker)
+nrow(turns)
+```
+
+Maybe Dramatis Personae is incomplete?
+
+
+## Back to step 1! {.smaller .build}
+
+Blech. Alt alt approach:
+
+```{r}
+speaker_pat <- "[A-Z]*\\s?[A-Z]*\\s?[A-Z]{3,}\\.\\s"
+speakers <- grep(pattern = speaker_pat, x = macbeth[279:3170], value = TRUE) %>%
+  str_extract(speaker_pat)
+unique(speakers)
+```
+
+
+## {.smaller .build}
+
+```{r}
+not_char_idx <- c(15, 16, 22)
+(chars <- unique(speakers)[-not_char_idx])
+```
+
+
+## {.smaller .build}
+
+```{r}
+(roster <- paste0("(", paste(chars, collapse = ")|("), ")"))
+turns <- macdf %>%
+  unnest_tokens(output = text, input = text, token = "regex", pattern = roster)
+nrow(turns)
+speaker <- grep(pattern = roster,
+                 x = macdf$text, value = TRUE) %>%
+  str_extract(roster)
+length(speaker)
+```
+
+...back on track.
+
+
+## Appending speaker {.smaller .build}
+
+```{r}
+turns %>%
+  mutate(speaker = speaker) %>%
+  select(speaker, text)
+```
+
+
+
+## Appending speaker {.smaller .build}
+
+Strip out punctuation.
+
+```{r}
+(turns <- (turns %>%
+  mutate(speaker = str_extract(speaker, "[A-Z]*\\s?[A-Z]*\\s?[A-Z]+")) %>%
+  select(speaker, text)))
+```
+
+
+## Filtering {.build}
+
+```{r}
+(macs_turns <- turns %>%
+  filter(speaker %in% c("MACBETH", "LADY MACBETH")))
+```
+
+
+## Macbeth vs Lady Macbeth
+
+Let's analyze the word frequencies used by Macbeth and Lady Macbeth. Let's break this down into steps.
+
+1. `unnest_token()` based on speech
+2. `filter()` for Macbeth and Lady Macbeth
+3. `unnest_token()` based on words
+4. `count()` word frequencies
+5. `ggplot()` them using `geom_bar()`.
+
+
+## Tokenize by words {.build}
+
+```{r}
+(macs_words <- macs_turns %>%
+  unnest_tokens(output = word, input = text, token = "words"))
+```
+
+
+## Count frequencies {.build}
+
+How do I do this?
+
+```{r}
+(macs_cnts <- macs_words %>%
+  group_by(speaker, word) %>%
+  summarize(cnt = n()))
+```
+
+
+## Macbeth's top 10 words? {.build}
+
+How do I do this?
+
+```{r}
+macs_cnts %>%
+  filter(speaker == "MACBETH") %>%
+  arrange(desc(cnt))
+```
+
+
+## Cream and chaff {.build}
+
+Non-discriminating words are called **stop words**. What we need is a list of common
+stop words to filter out of this data set.
+
+```{r}
+stop_words
+```
+
+
+## Anti-join {.build}
+
+An **anti-join** keeps all of the rows in the left table that *don't* have a key match in the right table.
+
+<img src="../figs/join-anti.png" height="250" width="600">
+
+```{r}
+macs_cnts <- macs_cnts %>%
+  anti_join(stop_words, by = "word")
+```
+
+
+## Macbeth's top 10 words {.build}
+
+```{r}
+macs_cnts %>%
+  filter(speaker == "MACBETH") %>%
+  arrange(desc(cnt))
+```
+
+
+## Elizabethan Stopwords
+
+<img src="../figs/elizabethan-stop-words.png" height="350" width=500">
+
+```{r}
+liz_stop_words <- read_table("https://raw.githubusercontent.com/BryanBumgardner/gutenburg_nlp/master/stopwords_elizabethan", col_names = "word")
+macs_cnts <- macs_cnts %>%
+  anti_join(liz_stop_words, by = "word")
+```
+
+
+## Macbeth's top 10 words {.build}
+
+```{r}
+macs_cnts %>%
+  filter(speaker == "MACBETH") %>%
+  arrange(desc(cnt))
+```
+
+
+## Lady Macbeth's top 10 words {.build}
+
+```{r}
+macs_cnts %>%
+  filter(speaker == "LADY MACBETH") %>%
+  arrange(desc(cnt))
+```
+
+
+## Plotting counts {.build}
+
+```{r}
+p1 <- macs_cnts %>%
+  filter(speaker == "MACBETH") %>%
+  arrange(desc(cnt)) %>%
+  slice(1:20) %>%
+  mutate(word = reorder(word, cnt)) %>%
+  ggplot(aes(word, cnt)) +
+  geom_col() +
+  labs(title = "Macbeth", x = NULL) + 
+  coord_flip()
+```
+
+
+##
+
+```{r echo = FALSE}
+p2 <- macs_cnts %>%
+  filter(speaker == "LADY MACBETH") %>%
+  arrange(desc(cnt)) %>%
+  slice(1:20) %>%
+  mutate(word = reorder(word, cnt)) %>%
+  ggplot(aes(word, cnt)) +
+  geom_col() +
+  labs(title = "Lady Macbeth", x = NULL) +
+  coord_flip()
+```
+
+```{r}
+library(gridExtra)
+grid.arrange(p1, p2, ncol = 2)
+```
+
+
+# Sentiment analysis
+
+##
+
+<img src="../figs/sentiment-analysis.png" height="425" width=700">
+
+
+## Our angle {.build}
+
+Part of the emotional content of a text has to do with the emotional content of the **words**. A first order approximation is to tie a list of sentiments to each word and collect this in a table similar to our stop list.
+
+What emotions do you associate with the following words?
+
+### lion
+
+### storm
+
+
+## Sentiment lexicon {.build}
+
+```{r}
+sentiments
+```
+
+
+## Sentiment lexicon
+
+```{r}
+get_sentiments(lexicon = "bing")
+```
+
+
+## Sentiment lexicon
+
+```{r}
+get_sentiments(lexicon = "afinn")
+```
+
+
+## {.build}
+
+```{r}
+filter(sentiments, word == "lion")
+filter(sentiments, word == "dagger")
+filter(sentiments, word == "death")
+```
+
+
+## What is the emotion palette? {.build}
+
+```{r}
+sentiments %>%
+  distinct(sentiment)
+```
+
+
+## Sentiment lexicons {.build}
+
+How valid are these associations?
+
+- Generally crowdsourced ("Do you consider this word to have a negative or positive sentiment?")
+- Contemporary testers
+- Consider different contexts (time, format, audience)
+
+
+## Sentiment Analysis Workflow
+
+<img src="../figs/tidytext-workflow2.png" height="170" width="750">
+
+
+## {.build}
+
+```{r}
+macs_words %>%
+  inner_join(get_sentiments("nrc"))
+```
+
+An inner join only keeps the words that have associated sentiments in the nrc lexicon.
+
+
+## {.build}
+
+```{r}
+macs_words %>%
+  inner_join(get_sentiments("nrc")) %>%
+  count(word, sentiment, sort = TRUE)
+```
+
+
+## Activity 9
+
+Write out the code needed to create two bar charts of the top positive and negative words used by Macbeth. Start from
+
+```{r}
+macs_words
+```
+
+
+## Macbeth's negative and positive words {.build}
+
+```{r}
+macs_words %>%
+  filter(speaker == "MACBETH") %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE)
+```
+
+## Macbeth's negative and positive words {.build}
+
+```{r}
+macs_words %>%
+  filter(speaker == "MACBETH") %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n))
+```
+
+## Macbeth's negative and positive words {.build}
+
+```{r eval = FALSE}
+macs_words %>%
+  filter(speaker == "MACBETH") %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y")+
+  labs("y = Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
+```
+
+## Macbeth's negative and positive words {.build}
+
+```{r echo = FALSE}
+macs_words %>%
+  filter(speaker == "MACBETH") %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y")+
+  labs("y = Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
+```
+
+
+## Lady Macbeth's negative and positive words {.build}
+
+```{r echo = FALSE}
+macs_words %>%
+  filter(speaker == "LADY MACBETH") %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  group_by(sentiment) %>%
+  top_n(10) %>%
+  ungroup() %>%
+  mutate(word = reorder(word, n)) %>%
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y")+
+  labs("y = Contribution to sentiment",
+       x = NULL) +
+  coord_flip()
+```
